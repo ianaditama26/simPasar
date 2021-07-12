@@ -92,6 +92,20 @@
                      </div>
                   </div>
                   <div class="form-group row">
+                     <label for="blok" class="col-sm-2 col-form-label">Blok</label>
+                     <div class="col-sm-10">
+                        <select name="blok" class="form-control" id="">
+                           <option value="">Pilih . . .</option>
+                           <option value=""></option>
+                        </select>
+                        @error('blok')
+                           <div class="invalid-feedback">
+                              {{ $message }}
+                           </div>
+                        @enderror
+                     </div>
+                  </div>
+                  <div class="form-group row">
                      <label for="luas" class="col-sm-2 col-form-label">Luas Lapak</label>
                      <div class="col-sm-10">
                         <input type="text" name="luas" class="form-control @error('luas') is-invalid @enderror" id="" required>

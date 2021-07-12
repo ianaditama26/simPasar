@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Mpasar\KontrakPedagang;
 use App\Models\Mpasar\MasterPasar;
 use App\Models\Mpasar\Pedagang;
+use App\Models\Mpasar\RiwayatKontrak;
 use App\Models\Mpasar\VerifikasiPedagang;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -26,7 +27,7 @@ class KontrakPedagangController extends Controller
 
     public function dtKontrak_Verifikasi()
     {
-        $kontrakPedagang_terVerifikasi = KontrakPedagang::where([
+        $kontrakPedagang_terVerifikasi = KontrakPedagang::with('pedagang.mPasar')->where([
             ['mPasar_id', \auth()->user()->pasar_id],
             ['status', '=', 'verified']
         ])->latest()->get();
@@ -94,7 +95,8 @@ class KontrakPedagangController extends Controller
     {   
         $verifikasiPedagang = KontrakPedagang::findOrFail($id);
         return \view('admin.kontrakPedagang.show', [
-            'verifikasiPedagang' => $verifikasiPedagang
+            'verifikasiPedagang' => $verifikasiPedagang,
+            'contrakHistories' => RiwayatKontrak::latest()->get()
         ]);
     }
 
@@ -141,9 +143,20 @@ class KontrakPedagangController extends Controller
     public function destroy($id)
     {
         $verifikasi = KontrakPedagang::find($id);
-        //update status pedagang = request
-        $verifikasi->pedagang->update(['status' => 'request']);
-        $verifikasi->forceDelete();
-        return \response()->json(['sukses' => true]);
+        if ($verifikasi->status != 'verified') {
+            //update status pedagang = request
+            $verifikasi->pedagang->update(['status' => 'request']);
+            $verifikasi->forceDelete();
+            $success = \true;
+            $message = 'Data Berhasil di hapus'; 
+        } else {
+            $success = \false;
+            $message = 'Data pedagang tidak dapat dihapus';
+        }
+        
+        return \response()->json([
+            'success' => $success,
+            'message' => $message
+        ]);
     }
 }

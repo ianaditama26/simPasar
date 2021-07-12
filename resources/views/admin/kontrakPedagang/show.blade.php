@@ -9,7 +9,7 @@
 @endsection
 @section('content')
    <div class="row">
-      <div class="col-22 col-md-12 col-lg-12">
+      <div class="col-12 col-md-12 col-lg-12">
          <div class="card">
             <div class="card-header">
                <h4>Detail Data</h4>
@@ -18,10 +18,12 @@
                <div class="buttons">
                   <a href="/{{ request()->segment(1) }}/{{ request()->segment(2) }}/{{ $verifikasiPedagang->id }}/edit" class="btn btn-icon icon-left btn-success"><i class="fa fa-edit"></i> Edit</a>
 
-                  <button type="submit" class="btn btn-icon icon-left btn-danger" style="display: inline" id="delete" data-id="{{ $verifikasiPedagang->id }}">
+                  <button type="submit" class="btn btn-icon icon-left btn-danger" style="display: inline" id="delete" class="btn btn-icon icon-left btn-dark" data-id="{{ $verifikasiPedagang->id }}">
                   <i class="fa fa-trash"> Hapus</i>
                   </button>
 
+                  <a href="{{ route('admin.riwayat-kontrak.perpajangan', $verifikasiPedagang->id) }}" class="btn btn-icon icon-left btn-light" data-toggle="modal" data-target="#modalRiwayatKontrak"><i class="fas fa-history"></i> Riwayat Kontrak</a>
+                  
                   <a href="{{ route('admin.riwayat-kontrak.perpajangan', $verifikasiPedagang->id) }}" class="btn btn-icon icon-left btn-dark" data-toggle="modal" data-target="#modalTanggungan"><i class="fas fa-file-contract"></i> Perpanjang Kontrak</a>
 
                   <a href="#" class="btn btn-icon icon-left btn-dark"><i class="fas fa-file-contract"></i> Pencabutan Kontrak</a>
@@ -115,6 +117,86 @@
    <link rel="stylesheet" href="{{ asset('assets/plugins/sweetalert2-theme/bootstrap-4.min.css') }}">
 @endpush
 @push('scripts')
+   {{-- MODAL --}}
+   <div class="modal fade" tabindex="-1" role="dialog" id="modalTanggungan">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title">Form Perpanjang Kontrak</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+         </div>
+         <div class="modal-body">
+            <form action="{{ route('admin.riwayat-kontrak.perpajangan') }}" method="post"></form>
+               @csrf
+               <div class="form-group">
+                  <label for="finish" class="col-sm-12 col-form-label">Tanggal Kontrak</label>
+                  <div class="col-sm-12">
+                     <input required type="date" name="riwayat_tglKontrak" class="form-control is-valid" value="{{ Carbon\Carbon::parse($verifikasiPedagang->akhirKontrak)->addDay(1)->format('d-m-Y') }}">
+                     <div class="valid-feedback">
+                        Tanggal Akhir Kontrak {{ Carbon\Carbon::parse($verifikasiPedagang->akhirKontrak)->format('d-m-Y') }}
+                     </div>
+                  </div>
+               </div>
+               <div class="form-group">
+                  <label for="finish" class="col-sm-12 col-form-label">Tanggal Akhir Kontrak</label>
+                  <div class="col-sm-12">
+                     <input required type="date" name="riwayat_akhirKontrak" class="form-control" value="">
+                  </div>
+               </div>
+            {{-- Form --}}
+         </div>
+         <div class="modal-footer bg-whitesmoke br">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <input type="hidden" name="kontrakPedagang_id" value="{{ $verifikasiPedagang->id }}">
+            <button type="submit" class="btn btn-success">Simpan</button>
+            </form>
+         </div>
+      </div>
+      </div>
+   </div>
+
+   <div class="modal fade" tabindex="-1" role="dialog" id="modalRiwayatKontrak">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title">Riwayat Kontrak</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+         </div>
+         <div class="modal-body">
+            <table class="table table-borderless" style="font-size:12px;">
+               <thead>
+                  <tr>
+                     <th>#</th>
+                     <th>Tanggal Kontrak</th>
+                     <th>Keterangan</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  @forelse($contrakHistories as $history)
+                     <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ Carbon\Carbon::parse($history->riwayat_tglKontrak)->format('d-m-Y') }} - {{ Carbon\Carbon::parse($history->riwayat_akhirKontrak)->format('d-m-Y') }}</td>
+                        <td>{{ $history->keterangan }}</td>
+                     </tr>
+                  @empty
+                     <tr>
+                        <td colspan="3"><center>No Data</center></td>
+                     </tr>
+                  @endforelse
+               </tbody>
+            </table>
+         </div>
+         <div class="modal-footer bg-whitesmoke br">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+         </div>
+      </div>
+      </div>
+   </div>
+
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
 
@@ -138,7 +220,7 @@
             }).then((result) => {
             if (result.value) {
                $.ajax({
-                     type: "GET",
+                     type: "DELETE",
                      url: "/admin/kontrak/" + id,
                      data: {
                         "id": id,
@@ -147,13 +229,16 @@
 
                      //setelah berhasil hapus data
                      success: function(data){
-                        Swal.fire(
-                        'Hapus data!',
-                        'Data telah di hapus.',
-                        'success'
-                        )
-                        //setelah alert succes, maka reload halaman
-                        window.location.href = '/admin/kontrak';
+                        if(data.success === true){
+                           Swal.fire('Erase Data!', data.message, 'success')
+                           location('admin/kontrak');
+                        } else {
+                           Swal.fire({
+                           icon: 'error',
+                           title: 'Oops...',
+                           text: data.message
+                           })
+                        }
                      },
                });
             }
@@ -197,44 +282,4 @@
          })
       });
    </script>
-
-   {{-- MODAL --}}
-   <div class="modal fade" tabindex="-1" role="dialog" id="modalTanggungan">
-      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
-      <div class="modal-content">
-         <div class="modal-header">
-            <h5 class="modal-title">Form Perpanjang Kontrak</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-            </button>
-         </div>
-         <div class="modal-body">
-            {!! Form::open(['route' => ['admin.riwayat-kontrak.perpajangan', $verifikasiPedagang->id]]) !!}
-               {!! Form::token(); !!}
-               <div class="form-group">
-                  <label for="finish" class="col-sm-12 col-form-label">Tanggal Kontrak</label>
-                  <div class="col-sm-12">
-                     <input required type="date" name="riwayat_tglKontrak" class="form-control is-valid" value="{{ Carbon\Carbon::now()->format('Y-m-d') }}">
-                     <div class="valid-feedback">
-                        Tanggal Akhir Kontrak {{ Carbon\Carbon::parse($verifikasiPedagang->tglKontrak)->format('d-m-Y') }}
-                     </div>
-                  </div>
-               </div>
-               <div class="form-group">
-                  <label for="finish" class="col-sm-12 col-form-label">Tanggal Akhir Kontrak</label>
-                  <div class="col-sm-12">
-                     <input required type="date" name="riwayat_akhirKontrak" class="form-control" value="">
-                  </div>
-               </div>
-            {{-- Form --}}
-         </div>
-         <div class="modal-footer bg-whitesmoke br">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-
-            <button type="submit" class="btn btn-success" data-dismiss="modal">Simpan</button>
-            {!! Form::close() !!}
-         </div>
-      </div>
-      </div>
-   </div>
 @endpush

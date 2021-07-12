@@ -30,7 +30,7 @@ class LapakController extends Controller
 
     public function dtLapak()
     {
-        return \datatables()->of(Lapak::where('mPasar_id', $this->getMasterPasar()->id)->latest()->get())
+        return \datatables()->of(Lapak::with('mPasar.kelas')->where('mPasar_id', $this->getMasterPasar()->id)->latest()->get())
         ->addColumn('action', 'template.partials.DT-action')
         ->addColumn('tarif', function(Lapak $lapak){
             return $lapak->getFormatTarif() . ' | '. $lapak->zonasi;

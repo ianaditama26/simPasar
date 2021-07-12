@@ -6,19 +6,24 @@ use App\Http\Controllers\Controller;
 use App\Models\Mpasar\Pedagang;
 use App\Models\Mpasar\Retribusi;
 use App\Models\Mpasar\KontrakPedagang;
+use App\Models\Mpasar\MasterPasar;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Calendar;
 use Carbon\CarbonPeriod;
 
 class RetribusiController extends Controller
 {
     public function getRangeRetribusiPayment($id)
     {
-        $retribusi = Retribusi::latest('tglBayar_retribusi')->first();
         $KontrakPedagang = KontrakPedagang::findOrFail($id);
 
+        $retribusi = Retribusi::where([
+            ['mPasar_id', '=', $this->getMasterPasar()->id],
+            ['pedagang_id', '=', $KontrakPedagang->pedagang_id]
+        ])->latest('tglBayar_retribusi')->first();
+
         $date = $retribusi == '' ? $KontrakPedagang->tglKontrak : $retribusi->tglBayar_retribusi;
+
         $date = Carbon::parse($date)->addDay();
         $now = Carbon::now()->format('Y-m-d');
         $dateRange = CarbonPeriod::create($date, $now);
@@ -34,7 +39,7 @@ class RetribusiController extends Controller
     {
         $KontrakPedagang = KontrakPedagang::findOrFail($id);
         $diffDatePayRetribution = $this->getRangeRetribusiPayment($id);
-        // \dd($this->getRangeRetribusiPayment($id));
+    
         $range = [];
         foreach($diffDatePayRetribution as $date){
             $range[] = [
@@ -49,10 +54,16 @@ class RetribusiController extends Controller
 
     public function getKontrakPedagang()
     {
-        $verifikasi = KontrakPedagang::where([
+        $verifikasi = KontrakPedagang::with('pedagang.Mpasar.kelas')->where([
             ['mPasar_id', \auth()->user()->pasar_id]
         ])->get();
         return $verifikasi;
+    }
+
+    public function getMasterPasar()
+    {
+        $masterPasar = MasterPasar::where('pasar_id', \auth()->user()->pasar_id)->first();
+        return $masterPasar;
     }
 
     public function index()
@@ -88,8 +99,14 @@ class RetribusiController extends Controller
     public function formRetribusi($id)
     {
         $KontrakPedagang = KontrakPedagang::findOrFail($id);
-        $lastPay_retribtion = Retribusi::latest('tglBayar_retribusi')->first();
+
+        $lastPay_retribtion = Retribusi::where([
+            ['mPasar_id', '=', $this->getMasterPasar()->id],
+            ['pedagang_id', '=', $KontrakPedagang->pedagang_id]
+        ])->latest('tglBayar_retribusi')->first();
+
         $tglKontrak = $KontrakPedagang->tglKontrak;
+
 
         return \view('admin.retribusi.create', [
             'kontrakPedagang' => $KontrakPedagang,

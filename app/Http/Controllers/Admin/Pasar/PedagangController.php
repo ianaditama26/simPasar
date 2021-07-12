@@ -15,7 +15,7 @@ class PedagangController extends Controller
 {
     public function getMasterPasar()
     {
-        $masterPasar = MasterPasar::where('pasar_id', \auth()->user()->pasar_id)->first();
+        $masterPasar = MasterPasar::with('pasar')->where('pasar_id', \auth()->user()->pasar_id)->first();
         return $masterPasar;
     }
 
@@ -26,7 +26,7 @@ class PedagangController extends Controller
 
     public function dtPedagang()
     {
-        $pedagang = Pedagang::where([
+        $pedagang = Pedagang::with('mPasar', 'lapak')->where([
             ['mPasar_id', '=' ,$this->getMasterPasar()->id],
             ['status', '=', 'request']
         ])->orderBy('created_at', 'asc')->get();

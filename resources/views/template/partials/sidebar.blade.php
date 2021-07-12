@@ -25,7 +25,7 @@
          @endrole
          @role('admin')
             <li>
-               <a class="nav-link" href="/admin"><i class="fa fa-tachometer"></i> <span>Dashboard</span></a>
+               <a class="nav-link" href="/admin"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
             </li>
             <li>
                <a class="nav-link" href="{{ route('admin.pasar.index') }}"><i class="fa fa-sticky-note"></i> <span>Data Pasar</span></a>
@@ -43,6 +43,10 @@
             
             <li>
                <a class="nav-link" href="{{ route('admin.retribusi.index') }}"><i class="fa fa-hand-holding-usd" aria-hidden="true"></i> <span>Retribusi</span></a>
+            </li>
+
+            <li>
+               <a class="nav-link" href="{{ route('admin.layout.lapak') }}"><i class="fa fa-map" aria-hidden="true"></i> <span>Layout Lapak</span></a>
             </li>
          @endrole
       </ul>

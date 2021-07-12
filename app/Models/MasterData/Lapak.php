@@ -12,8 +12,6 @@ class Lapak extends Model
     use HasFactory;
     protected $fillable = ['mPasar_id', 'tarif' ,'komoditas', 'zonasi', 'noLapak', 'luas', 'statusLapak'];
 
-    protected $with = ['mPasar'];
-
     // statusLapak = 0 (lapak siap di booking)
     // statusLapak = 1 (booking lapak)
 

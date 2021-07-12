@@ -62,5 +62,12 @@ Route::post('retribusi/pembayaran', 'pasar\RetribusiController@pembayaranRetribu
    |--------------------------------------------------------------------------
 */
 // perpanjang kontrak
-Route::get('riwayat-kontrak/perpanjang/{idVerifikasi}', 'pasar\RiwayatKontrakController@perpanjangan')->name('riwayat-kontrak.perpajangan');
+Route::post('riwayat-kontrak/perpanjang', 'pasar\RiwayatKontrakController@perpanjangan')->name('riwayat-kontrak.perpajangan');
+
+/*
+   |--------------------------------------------------------------------------
+   | Layout Lapak
+   |--------------------------------------------------------------------------
+*/
+Route::get('layout/lapak', 'pasar\LayoutLapakController@index')->name('layout.lapak');
 

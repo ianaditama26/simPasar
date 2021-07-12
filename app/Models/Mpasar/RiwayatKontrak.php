@@ -8,11 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class RiwayatKontrak extends Model
 {
     use HasFactory;
-    protected $fillable = ['kontrakVerifikasi_id', 'riwayat_tglKontrak', 'riwayat_akhirKontrak', 'keterangan'];
+    protected $fillable = ['kontrakPedagang_id', 'riwayat_tglKontrak', 'riwayat_akhirKontrak', 'keterangan'];
     protected $with = ['kontrak_pedagang'];
 
     public function kontrak_pedagang()
     {
-        return $this->belongsTo(KontrakPedagang::class, 'kontrakVerifikasi_id');
+        return $this->belongsTo(KontrakPedagang::class, 'kontrakPedagang_id');
     }
 }

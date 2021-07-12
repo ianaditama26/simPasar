@@ -20,9 +20,9 @@ class MasterPasarController extends Controller
     public function index()
     {
         return \view('admin.pasar.index', [
-            'pasar' => Pasar::where('id', \auth()->user()->pasar_id)->first(),
-            'classes' => Kelas::get(),
-            'dataMasterPasar' => MasterPasar::where('pasar_id', \auth()->user()->pasar_id)->first()
+            'pasar' => Pasar::with('mPasar.user')->where('id', \auth()->user()->pasar_id)->first(),
+            'classes' => Kelas::with('kelasTarifs')->get(),
+            'dataMasterPasar' => MasterPasar::with('pasar', 'kelas')->where('pasar_id', \auth()->user()->pasar_id)->first()
         ]);
     }
 

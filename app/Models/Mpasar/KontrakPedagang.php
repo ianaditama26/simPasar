@@ -10,7 +10,6 @@ class KontrakPedagang extends Model
 {
     use HasFactory, SoftDeletes;
     protected $fillable = ['pedagang_id', 'mPasar_id', 'noIzin_pedagang', 'tglKontrak', 'akhirKontrak', 'status'];
-    protected $with = ['pedagang', 'mPasar'];
 
     public function pedagang()
     {
@@ -20,5 +19,10 @@ class KontrakPedagang extends Model
     public function mPasar()
     {
         return $this->belongsTo(MasterPasar::class, 'mPasar_id');
+    }
+
+    public function riwayatKontraks()
+    {
+        return $this->hasMany(RiwayatKontrak::class, 'kontrakPedagang_id');
     }
 }
