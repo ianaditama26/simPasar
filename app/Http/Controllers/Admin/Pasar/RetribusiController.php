@@ -10,6 +10,7 @@ use App\Models\Mpasar\MasterPasar;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Carbon\CarbonPeriod;
+use Illuminate\Support\Facades\Redirect;
 
 class RetribusiController extends Controller
 {
@@ -107,16 +108,22 @@ class RetribusiController extends Controller
 
         $tglKontrak = $KontrakPedagang->tglKontrak;
 
+        $inisialPasar = $this->getMasterPasar()->getInisialPasar();
+        $noUrutAkhir  = Retribusi::max('noFaktur');
+        preg_match_all('!\d+!', $noUrutAkhir, $matches);
+        $noFaktur = 'PS/'.\strtoupper($inisialPasar).'/'.sprintf("%03s", abs($matches[0][0] + 1));
 
         return \view('admin.retribusi.create', [
             'kontrakPedagang' => $KontrakPedagang,
             'dateFirstPay' => $lastPay_retribtion == '' ? $tglKontrak : Carbon::parse($lastPay_retribtion->tglBayar_retribusi)->format('Y-m-d'),
-            'ranges' => $this->getRangePaymentRettibution($id)
+            'ranges' => $this->getRangePaymentRettibution($id),
+            'noFaktur' => $noFaktur
         ]);
     }
 
     public function store(Request $request)
     {
+        
         if ($request->finish < $request->start) {
             return \redirect()->back()->with('message', 'Format tanggal pembayaran tidak benar !');
         }
@@ -131,16 +138,24 @@ class RetribusiController extends Controller
                     'mPasar_id' => $request->mPasar_id,
                     'pedagang_id' => $request->pedagang_id,
                     'lapak_id' => $request->lapak_id,
+                    'noFaktur' => $request->noFaktur,
                     'tglBayar_retribusi' => $date->format('Y-m-d'),
                     'tarif' => $request->tarif
                 ];
-                Retribusi::updateOrCreate([
-                    'tglBayar_retribusi' => $date->format('Y-m-d')
+                $retribusi = Retribusi::updateOrCreate([
+                    'pedagang_id' => $request->pedagang_id,
+                    'tglBayar_retribusi' => $date->format('Y-m-d'),
+                    'noFaktur' => $request->noFaktur,
                 ], $create);
             }
         }
-
-        return \redirect()->route('admin.retribusi.index')->with('message', 'Sukses');
+        
+        return view('admin.retribusi.invoice', [
+            'retribusi' => $retribusi,
+            'dari' => $request->start,
+            'sampai' => $request->finish,
+            'hari' => \count($dateRange)
+        ]);
     }
 
     /**

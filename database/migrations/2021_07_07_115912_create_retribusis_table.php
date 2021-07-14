@@ -25,6 +25,7 @@ class CreateRetribusisTable extends Migration
             $table->unsignedBigInteger('lapak_id');
             $table->foreign('lapak_id')->references('id')->on('lapaks');
 
+            $table->string('noFaktur');
             $table->string('tglBayar_retribusi')->nullable();
             $table->string('tarif')->nullable();
             $table->string('status')->default(0);

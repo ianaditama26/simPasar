@@ -3,8 +3,11 @@
 namespace Database\Seeders;
 
 use App\Models\MasterData\Lapak;
+use App\Models\Mpasar\KontrakPedagang;
 use App\Models\Mpasar\Pedagang;
+use App\Models\Mpasar\Retribusi;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -47,7 +50,7 @@ class PedagangSeeder extends Seeder
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
-
+            //data dummy pedagang pasar oro oro dowo
             [
                 'lapak_id' => '5',
                 'mPasar_id' => 1,
@@ -58,7 +61,7 @@ class PedagangSeeder extends Seeder
                 'alamat' => 'Perum Puri Cempaka Blok Q-23',
                 'foto' => '',
                 'noTelp' => '0812132232',
-                'status' => 'request',
+                'status' => 'verified',
                 'created_at' => Carbon::now()->addMinute(20),
                 'updated_at' => Carbon::now(),
             ],
@@ -73,15 +76,98 @@ class PedagangSeeder extends Seeder
                 'alamat' => 'Perum Puri Cempaka Blok Q-23',
                 'foto' => '',
                 'noTelp' => '0817122232',
-                'status' => 'request',
-                'created_at' => Carbon::now(),
+                'status' => 'verified',
+                'created_at' => Carbon::now()->addMinute(25),
+                'updated_at' => Carbon::now(),
+            ],
+
+            [
+                'lapak_id' => '7',
+                'mPasar_id' => 1,
+                'nik' => 62758624172,
+                'nama' => 'supriyono',
+                'tempat_tglLahir' => 'madura 26-09-1978',
+                'pekerjaan' => 'pedagang',
+                'alamat' => 'Jl klojen Blok Q-23',
+                'foto' => '',
+                'noTelp' => '08232343232',
+                'status' => 'verified',
+                'created_at' => Carbon::now()->addMinute(25),
                 'updated_at' => Carbon::now(),
             ],
         ];
 
-        $lapak = DB::table('lapaks')->whereIn('id', [14,10,5,8])->update(['statusLapak' => 1]);
-        
-
+        $lapak = DB::table('lapaks')->whereIn('id', [14,10,5,7,8])->update(['statusLapak' => 1]);
         Pedagang::insert($pedagang);
+        
+        $kontrak_pedagang = [
+            [
+                'pedagang_id' => 3,
+                'mPasar_id' => 1,
+                'noIzin_pedagang' => '188.445/232/35.73.112/2021',
+                'tglKontrak' => Carbon::now()->format('Y-m-d'),
+                'akhirKontrak' => Carbon::now()->addYears(2)->format('Y-m-d'),
+                'status' => 'verified'
+            ],
+
+            [
+                'pedagang_id' => 4,
+                'mPasar_id' => 1,
+                'noIzin_pedagang' => '119.031/256/34.20.1311/2021',
+                'tglKontrak' => Carbon::now()->subMonths(2)->format('Y-m-d'),
+                'akhirKontrak' => Carbon::now()->addMonths(22)->format('Y-m-d'),
+                'status' => 'verified'
+            ],
+
+            [
+                'pedagang_id' => 5,
+                'mPasar' => 1,
+                'noIzin_pedagang' => '120.031/258/36.20.1311/2021',
+                'tglKontrak' => Carbon::now()->subMonths(4)->format('Y-m-d'),
+                'akhirKontrak' => Carbon::now()->addMonths(20)->format('Y-m-d'),
+                'status' => 'verified'
+            ],
+        ];
+        KontrakPedagang::insert($kontrak_pedagang);
+
+        //data dummy pedagang yanto
+        $start = Carbon::now()->subMonths(4)->format('Y-m-d');
+        $finish = Carbon::now()->subMonths(4)->addDays(14)->format('Y-m-d');
+        $datesRange = CarbonPeriod::create($start, $finish);
+
+        foreach($datesRange as $date){
+            $retribusi = [
+                'mPasar_id' => 1,
+                'pedagang_id' => 5,
+                'lapak_id' => 7,
+                'noFaktur' => 'PS/PODO/001',
+                'tglBayar_retribusi' => $date->format('Y-m-d'),
+                'tarif' => 10000,
+                'status' => 0,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ];
+            Retribusi::insert($retribusi);
+        }
+
+        //data dummy pedagang marni
+        $start = Carbon::now()->subMonths(2)->format('Y-m-d');
+        $finish = Carbon::now()->addDays(1)->format('Y-m-d');
+        $datesRangeMarni = CarbonPeriod::create($start, $finish);
+
+        foreach($datesRangeMarni as $date){
+            $retribusiMarni = [
+                'mPasar_id' => 1,
+                'pedagang_id' => 4,
+                'lapak_id' => 8,
+                'noFaktur' => 'PS/PODO/002',
+                'tglBayar_retribusi' => $date->format('Y-m-d'),
+                'tarif' => 10000,
+                'status' => 0,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ];
+            Retribusi::insert($retribusiMarni);
+        }
     }
 }

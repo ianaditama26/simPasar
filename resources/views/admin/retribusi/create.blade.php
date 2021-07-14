@@ -98,6 +98,7 @@
                <input type="hidden" name="pedagang_id" value="{{ $kontrakPedagang->pedagang_id }}">
                <input type="hidden" name="lapak_id" value="{{ $kontrakPedagang->pedagang->lapak->id }}">
                <input type="hidden" name="tarif" value="{{ $kontrakPedagang->pedagang->lapak->tarif }}">
+               <input type="hidden" name="noFaktur" value="{{ $noFaktur }}">
                
                <button type="submit" class="btn btn-success">Bayar</button>
             </div>

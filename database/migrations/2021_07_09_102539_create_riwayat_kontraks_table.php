@@ -16,17 +16,15 @@ class CreateRiwayatKontraksTable extends Migration
         Schema::create('riwayat_kontraks', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('mPasar_id');
-            $table->foreign('mPasar_id')->on('master_pasars')->references('id');
-
-            $table->unsignedBigInteger('kontrakVerifikasi_id');
-            $table->foreign('kontrakVerifikasi_id')->on('kontrak_pedagangs')->references('id');
+            $table->unsignedBigInteger('kontrakPedagang_id');
+            $table->foreign('kontrakPedagang_id')->on('kontrak_pedagangs')->references('id');
 
             //tanggal kontrak lama
             $table->date('riwayat_tglKontrak');
             $table->date('riwayat_akhirKontrak');
 
             $table->string('keterangan');
+            $table->string('status')->nullable();
 
             $table->timestamps();
         });

@@ -5,6 +5,11 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'DashboardController');
+Route::get('dt/pedagang/sp', 'DashboardController@dtPedagangSp')->name('dt.pedagangSp');
+
+Route::get('/invoice', function(){
+   return view('admin.retribusi.invoice');
+});
 
 Route::get('/create-table', function(){
    $pasar = 'pasarTest';
@@ -35,6 +40,7 @@ Route::get('dt/lapak', 'pasar\LapakController@dtLapak')->name('dt.lapak');
 */
 Route::resource('pedagang', 'pasar\PedagangController');
 Route::get('dt/pedagang', 'pasar\PedagangController@dtPedagang')->name('dt.pedagang');
+Route::get('sp/pedagang/detail/{id}', 'pasar\PedagangController@spPedagang_detail');
 
 /*
    |--------------------------------------------------------------------------
@@ -63,6 +69,8 @@ Route::post('retribusi/pembayaran', 'pasar\RetribusiController@pembayaranRetribu
 */
 // perpanjang kontrak
 Route::post('riwayat-kontrak/perpanjang', 'pasar\RiwayatKontrakController@perpanjangan')->name('riwayat-kontrak.perpajangan');
+//pencabutan
+Route::post('riwayat-kontrak/pencabutan', 'pasar\RiwayatKontrakController@pencabutan')->name('riwayat-kontrak.pencabutan');
 
 /*
    |--------------------------------------------------------------------------

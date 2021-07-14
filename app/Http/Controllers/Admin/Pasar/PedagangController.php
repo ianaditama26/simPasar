@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PedagangRequest;
 use App\Models\MasterData\Lapak;
 use App\Models\MasterData\ZonaLapak;
+use App\Models\Mpasar\KontrakPedagang;
 use App\Models\Mpasar\MasterPasar;
 use App\Models\Mpasar\Pedagang;
 use Illuminate\Support\Facades\Redirect;
@@ -28,7 +29,6 @@ class PedagangController extends Controller
     {
         $pedagang = Pedagang::with('mPasar', 'lapak')->where([
             ['mPasar_id', '=' ,$this->getMasterPasar()->id],
-            ['status', '=', 'request']
         ])->orderBy('created_at', 'asc')->get();
         return \datatables()->of($pedagang)
         ->addColumn('action', 'template.partials.DT-action')
@@ -90,7 +90,9 @@ class PedagangController extends Controller
             $request->except('_token', 'foto'), \compact('foto')
         );
 
+        //create data lapak
         $pedagang = Pedagang::create($data);
+        
         //update status lapak = 1
         $pedagang->lapak->update(['statusLapak' => 1]);
         return Redirect::route('admin.pedagang.show', $pedagang);
@@ -107,6 +109,12 @@ class PedagangController extends Controller
         return \view('admin.pedagang.show', [
             'pedagang' => Pedagang::findOrFail($id)
         ]);
+    }
+
+    public function spPedagang_detail($id)
+    {
+        $verifikasiPedagang = KontrakPedagang::where('pedagang_id', $id)->first();
+        return Redirect::route('admin.kontrak.show', $verifikasiPedagang->id);
     }
 
     /**

@@ -22,7 +22,7 @@
                   <i class="fa fa-trash"></i> Hapus
                   </button>
 
-                  @if($pedagang->status == 'request')
+                  @if($pedagang->status != 'verified')
                      <a href="{{ route('admin.verifikasiForm.create', $pedagang->id) }}" class="btn btn-icon icon-left btn-info" >
                      <i class="fas fa-file-contract"></i> Verifikas Pedagang
                      </a>

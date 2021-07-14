@@ -1,9 +1,9 @@
 @extends('template.coreTemplate')
-@section('title', 'Data Verifikasi')
+@section('title', 'Data Retribusi')
 @section('breadcrumb')
    <div class="section-header-breadcrumb">
       <div class="breadcrumb-item active"><a href="/admin">Dashboard</a></div>
-      <div class="breadcrumb-item">Data Verifikasi</div>
+      <div class="breadcrumb-item">Data Retribusi</div>
    </div>
 @endsection
 @section('content')
@@ -11,7 +11,7 @@
       <div class="col-12 col-md-12">
          <div class="card">
             <div class="card-header">
-               <h4>Data Verifikasi</h4>
+               <h4>Data Retribusi</h4>
             </div>
             <div class="card-body">
                @if(session('message'))

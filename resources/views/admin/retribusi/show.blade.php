@@ -99,7 +99,7 @@
       <div class="col-22 col-md-12 col-lg-12">
          <div class="card">
             <div class="card-header">
-               <h4>Detail Data</h4>
+               <h4>Retribusi pedagang</h4>
             </div>
             <div class="card-body">
                <div id="calendar"></div>
@@ -130,9 +130,9 @@
             events: [
                @foreach($detailRetribusi as $v)
                   {
-                     title: '{{ $v->pedagang->nama }}',
+                     title: '{{ $v->noFaktur }}',
                      start: '{{ $v->tglBayar_retribusi }}',
-                     color: 'green'
+                     color: 'lightgreen'
                   },
                @endforeach
             ],

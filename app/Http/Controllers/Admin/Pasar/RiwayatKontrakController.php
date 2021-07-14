@@ -19,7 +19,8 @@ class RiwayatKontrakController extends Controller
             'kontrakPedagang_id' => $kontrakPedagang->id,
             'riwayat_tglKontrak' => $kontrakPedagang->tglKontrak,
             'riwayat_akhirKontrak' => $kontrakPedagang->akhirKontrak,
-            'keterangan' => 'perpanjang kontrak'
+            'keterangan' => 'perpanjang kontrak',
+            'status' => 'perpanjang'
         ]);
 
         //update tgl dan akhir kontrak yang baru
@@ -29,5 +30,30 @@ class RiwayatKontrakController extends Controller
         ]);
 
         return Redirect::route('admin.kontrak.show', $kontrakPedagang->id);
+    }
+
+    public function pencabutan(Request $request)
+    {
+        $kontrakPedagang = KontrakPedagang::find($request->kontrakPedagang_id);
+        
+        //create riwayat tglKontrak dan akhir kontrak
+        RiwayatKontrak::create([
+            'kontrakPedagang_id' => $kontrakPedagang->id,
+            'riwayat_tglKontrak' => $kontrakPedagang->tglKontrak,
+            'riwayat_akhirKontrak' => $kontrakPedagang->akhirKontrak,
+            'keterangan' => $request->keterangan,
+            'status' => 'pencabutan'
+        ]);
+
+        //update status pedagang = nonActive
+        $kontrakPedagang->pedagang->update(['status' => 'nonActive']);
+
+        //update status lapak = 0
+        $kontrakPedagang->pedagang->lapak(['statusLapak' => 0]);
+
+        //hapus data dari kontrak pedagang
+        $kontrakPedagang->delete();
+
+        return 'sip';
     }
 }

@@ -24,9 +24,9 @@
 
                   <a href="{{ route('admin.riwayat-kontrak.perpajangan', $verifikasiPedagang->id) }}" class="btn btn-icon icon-left btn-light" data-toggle="modal" data-target="#modalRiwayatKontrak"><i class="fas fa-history"></i> Riwayat Kontrak</a>
                   
-                  <a href="{{ route('admin.riwayat-kontrak.perpajangan', $verifikasiPedagang->id) }}" class="btn btn-icon icon-left btn-dark" data-toggle="modal" data-target="#modalTanggungan"><i class="fas fa-file-contract"></i> Perpanjang Kontrak</a>
+                  <a href="#" class="btn btn-icon icon-left btn-dark" data-toggle="modal" data-target="#modalFormPerpanjang"><i class="fas fa-file-contract"></i> Perpanjang Kontrak</a>
 
-                  <a href="#" class="btn btn-icon icon-left btn-dark"><i class="fas fa-file-contract"></i> Pencabutan Kontrak</a>
+                  <a href="#" class="btn btn-icon icon-left btn-dark" data-toggle="modal" data-target="#modalFormPencabutan"><i class="fas fa-file-contract"></i> Pencabutan Kontrak</a>
                </div>
                
                <div class="row">
@@ -118,7 +118,7 @@
 @endpush
 @push('scripts')
    {{-- MODAL --}}
-   <div class="modal fade" tabindex="-1" role="dialog" id="modalTanggungan">
+   <div class="modal fade" tabindex="-1" role="dialog" id="modalFormPerpanjang">
       <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
       <div class="modal-content">
          <div class="modal-header">
@@ -157,42 +157,39 @@
       </div>
    </div>
 
-   <div class="modal fade" tabindex="-1" role="dialog" id="modalRiwayatKontrak">
+   <div class="modal fade" tabindex="-1" role="dialog" id="modalFormPencabutan">
       <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
       <div class="modal-content">
          <div class="modal-header">
-            <h5 class="modal-title">Riwayat Kontrak</h5>
+            <h5 class="modal-title">Form pencabutan lapak</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
             </button>
          </div>
+         <form action="{{ route('admin.riwayat-kontrak.pencabutan') }}" method="post">
+         @csrf
          <div class="modal-body">
-            <table class="table table-borderless" style="font-size:12px;">
-               <thead>
-                  <tr>
-                     <th>#</th>
-                     <th>Tanggal Kontrak</th>
-                     <th>Keterangan</th>
-                  </tr>
-               </thead>
-               <tbody>
-                  @forelse($contrakHistories as $history)
-                     <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{ Carbon\Carbon::parse($history->riwayat_tglKontrak)->format('d-m-Y') }} - {{ Carbon\Carbon::parse($history->riwayat_akhirKontrak)->format('d-m-Y') }}</td>
-                        <td>{{ $history->keterangan }}</td>
-                     </tr>
-                  @empty
-                     <tr>
-                        <td colspan="3"><center>No Data</center></td>
-                     </tr>
-                  @endforelse
-               </tbody>
-            </table>
+            <div class="form-group">
+               <label for="finish" class="col-sm-12 col-form-label">Keterangan</label>
+               <div class="col-sm-12">
+                  <textarea name="keterangan" class="form-control" cols="30" rows="10" height="130px"></textarea>
+               </div>
+            </div>
+            <div class="form-group">
+               <input type="checkbox" name="checkbox" value="check"/>
+               <div class="col-sm-12">
+                  <p>
+                     Dengan ini saya mencabut nyawa pedagang ini
+                  </p>
+               </div>
+            </div>
          </div>
          <div class="modal-footer bg-whitesmoke br">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <input type="hidden" name="kontrakPedagang_id" value="{{ $verifikasiPedagang->id }}">
+            <button type="submit" class="btn btn-success" onclick="if(!this.form.checkbox.checked){alert('Beri centang untuk mensetujui !.');return false}"  >Simpan</button>
          </div>
+         </form>
       </div>
       </div>
    </div>

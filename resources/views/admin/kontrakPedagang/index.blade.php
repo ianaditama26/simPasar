@@ -1,5 +1,5 @@
 @extends('template.coreTemplate')
-@section('title', 'Data Verifikasi')
+@section('title', 'Data Kontrak Pedagang')
 @section('breadcrumb')
    <div class="section-header-breadcrumb">
       <div class="breadcrumb-item active"><a href="/admin">Dashboard</a></div>
@@ -11,7 +11,7 @@
       <div class="col-12 col-md-12">
          <div class="card">
             <div class="card-header">
-               <h4>Data Verifikasi</h4>
+               <h4>Data Kontrak Pedagang</h4>
             </div>
             <div class="card-body">
                <div class="table-responsive">

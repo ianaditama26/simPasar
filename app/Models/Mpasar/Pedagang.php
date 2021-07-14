@@ -54,8 +54,8 @@ class Pedagang extends Model
         return $this->hasOne(KontrakPedagang::class);
     }
 
-    public function retribusi()
+    public function retribusis()
     {
-        return $this->hasOne(Retribusi::class);
+        return $this->hasMany(Retribusi::class, 'pedagang_id');
     }
 }
