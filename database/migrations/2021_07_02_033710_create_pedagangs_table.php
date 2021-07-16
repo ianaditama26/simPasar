@@ -15,6 +15,13 @@ class CreatePedagangsTable extends Migration
     {
         Schema::create('pedagangs', function (Blueprint $table) {
             $table->id();
+
+            $table->unsignedBigInteger('lapak_id');
+            $table->foreign('lapak_id')->references('id')->on('lapaks');
+
+            $table->unsignedBigInteger('mPasar_id');
+            $table->foreign('mPasar_id')->references('id')->on('master_pasars');
+
             $table->unsignedBigInteger('nik')->nullable();
             $table->string('nama');
             $table->string('tempat_tglLahir')->nullable();

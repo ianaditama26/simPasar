@@ -13,8 +13,6 @@
          <div class="card">
             <div class="card-header">
                <h4>Detail Data</h4>
-            </div>
-            <div class="card-body">
                <div class="buttons">
                   <a href="/{{ request()->segment(1) }}/{{ request()->segment(2) }}/{{ $pedagang->id }}/edit" class="btn btn-icon icon-left btn-success"><i class="fa fa-edit"></i> Edit</a>
 
@@ -28,6 +26,25 @@
                      </a>
                   @endif
                </div>
+            </div>
+            <div class="card-body">
+               @if($pedagang->status == 'request')
+                     <div class="alert alert-info">
+                           Status request lapak.
+                     </div>
+                  @elseif($pedagang->status == 'verified')
+                     <div class="alert alert-success">
+                           Status pedagang verifikasi.
+                     </div>
+                  @elseif($pedagang->status == 'revoke')
+                     <div class="alert alert-danger">
+                        Status pedagang non aktif.
+                     </div>
+                  @elseif($pedagang->status == 'decline')
+                     <div class="alert alert-warning">
+                        Status pedagang request di tolak.
+                     </div>
+               @endif
                <div class="row">
                   <div class="col-md-7">
                      <div class="form-group row">
@@ -150,13 +167,16 @@
 
                      //setelah berhasil hapus data
                      success: function(data){
-                        Swal.fire(
-                        'Hapus data!',
-                        'Data telah di hapus.',
-                        'success'
-                        )
-                        //setelah alert succes, maka reload halaman
-                        window.location.href = '/admin/pedagang';
+                        if(data.success === true){
+                           Swal.fire('Erase Data!', data.message, 'success')
+                           location = 'admin/pedagang';
+                        } else {
+                           Swal.fire({
+                           icon: 'error',
+                           title: 'Oops...',
+                           text: data.message
+                           })
+                        }
                      },
                });
             }

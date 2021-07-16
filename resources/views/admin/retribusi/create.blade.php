@@ -72,6 +72,12 @@
                <form action="{{ route('admin.retribusi.store') }}" method="post">
                @csrf
                <div class="form-group row">
+                  <label for="start" class="col-sm-4 col-form-label">Nomot Faktur</label>
+                  <div class="col-sm-8">
+                     <input type="text" name="noFaktur" class="form-control" value="{{ $noFaktur }}" readonly>
+                  </div>
+               </div>
+               <div class="form-group row">
                   <label for="start" class="col-sm-4 col-form-label">Dari Tanggal</label>
                   <div class="col-sm-8">
                      <input required type="date" name="start" class="form-control is-valid" value="{{ $dateFirstPay }}" readonly>
@@ -98,7 +104,6 @@
                <input type="hidden" name="pedagang_id" value="{{ $kontrakPedagang->pedagang_id }}">
                <input type="hidden" name="lapak_id" value="{{ $kontrakPedagang->pedagang->lapak->id }}">
                <input type="hidden" name="tarif" value="{{ $kontrakPedagang->pedagang->lapak->tarif }}">
-               <input type="hidden" name="noFaktur" value="{{ $noFaktur }}">
                
                <button type="submit" class="btn btn-success">Bayar</button>
             </div>

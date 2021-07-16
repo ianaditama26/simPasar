@@ -43,3 +43,10 @@ Route::get('dt/pasar', 'MasterData\PasarController@dtPasar')->name('dt.pasar');
 */
 Route::resource('master-kelas', 'MasterData\KelasController');
 Route::get('dt/master-kelas', 'MasterData\KelasController@dtKelas')->name('dt.masterKelas');
+
+/*
+   |--------------------------------------------------------------------------
+   | User
+   |--------------------------------------------------------------------------
+*/
+Route::resource('user', 'MasterData\UserController');

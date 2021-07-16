@@ -22,6 +22,9 @@
                   </li>
                </ul>
             </li>
+            <li>
+               <a class="nav-link" href="{{ route('super_admin.user.index') }}"><i class="fa fa-user"></i> <span>User</span></a>
+            </li>
          @endrole
          @role('admin')
             <li>
@@ -47,6 +50,10 @@
 
             <li>
                <a class="nav-link" href="{{ route('admin.layout.lapak') }}"><i class="fa fa-map" aria-hidden="true"></i> <span>Layout Lapak</span></a>
+            </li>
+
+            <li>
+               <a class="nav-link" href="{{ route('admin.riwayatPedagang.index') }}"><i class="fa fa-history" aria-hidden="true"></i> <span>Riwayat Pedagang</span></a>
             </li>
          @endrole
       </ul>

@@ -50,27 +50,32 @@ Route::get('sp/pedagang/detail/{id}', 'pasar\PedagangController@spPedagang_detai
 Route::resource('kontrak', 'pasar\KontrakPedagangController');
 Route::get('dt/kontrak/verifikasi', 'pasar\KontrakPedagangController@dtKontrak_Verifikasi')->name('dt.kontrakVerifikasi');
 Route::get('form/verifikasi/pedagang/{id}', 'pasar\KontrakPedagangController@formVerifikasiPedagang')->name('verifikasiForm.create');
+// perpanjang kontrak
+Route::post('kontrak-pedagang/perpanjang', 'pasar\KontrakPedagangController@perpanjangan')->name('riwayat-kontrak.perpajangan');
+//pencabutan kontrak
+Route::post('kontrak-pedagang/pencabutan', 'pasar\KontrakPedagangController@pencabutan')->name('riwayat-kontrak.pencabutan');
+
 
 
 /*
    |--------------------------------------------------------------------------
-   | Verifikasi Retribusi
+   | Retribusi
    |--------------------------------------------------------------------------
 */
-Route::resource('retribusi', 'pasar\RetribusiController')->except('create');
+Route::resource('retribusi', 'pasar\RetribusiController')->except('create', 'show');
 Route::get('dt/verifikasi', 'pasar\RetribusiController@dtVerifikasi')->name('dt.verifikasi');
 Route::get('form/retribusi/{id}', 'pasar\RetribusiController@formRetribusi')->name('retribusi.form');
 Route::post('retribusi/pembayaran', 'pasar\RetribusiController@pembayaranRetribusi')->name('retribusi.pembayaran');
 
 /*
    |--------------------------------------------------------------------------
-   | Verifikasi riwayat kontrak pedagang
+   | riwayat kontrak pedagang
    |--------------------------------------------------------------------------
 */
-// perpanjang kontrak
-Route::post('riwayat-kontrak/perpanjang', 'pasar\RiwayatKontrakController@perpanjangan')->name('riwayat-kontrak.perpajangan');
-//pencabutan
-Route::post('riwayat-kontrak/pencabutan', 'pasar\RiwayatKontrakController@pencabutan')->name('riwayat-kontrak.pencabutan');
+// view riwayat kontrak
+Route::get('riwayat/pedagang', 'pasar\RiwayatKontrakController@index')->name('riwayatPedagang.index');
+Route::get('dt/riwayat/pedagang/', 'pasar\RiwayatKontrakController@riwayatPedagang')->name('dt.riwayatPedagang');
+Route::get('riwayat/pedagang/{id}', 'pasar\RiwayatKontrakController@show')->name('riwayatPedagang.show');
 
 /*
    |--------------------------------------------------------------------------

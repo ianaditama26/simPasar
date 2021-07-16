@@ -9,7 +9,8 @@ use App\Models\Mpasar\Pedagang;
 use App\Models\Mpasar\Retribusi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
+use Khill\Lavacharts\Laravel\LavachartsFacade;
 
 class DashboardController extends Controller
 {
@@ -22,7 +23,10 @@ class DashboardController extends Controller
     public function getPeringatan()
     {
 
-        $pedagang = Pedagang::with('retribusis')->where('status', 'verified')->get();
+        $pedagang = Pedagang::with('retribusis')->where([
+            ['mPasar_id', '=', $this->getMasterPasar()],
+            ['status', 'verified']
+        ])->get();
         foreach($pedagang as $v){
             $latestDate = $v->retribusis->max('tglBayar_retribusi');
             $add3Mounth = Carbon::parse($latestDate)->addMonths(3);
@@ -51,7 +55,7 @@ class DashboardController extends Controller
             ];
         }
         
-        
+        $dataPedagang_verified = [];
         $sp = [];
         foreach($dataPedagang_verified as $data){
             $sp1 = $data['sp1'];
@@ -59,13 +63,6 @@ class DashboardController extends Controller
             $sp3 = $data['sp3'];
             $dateNow = Carbon::now()->addDays(1)->format('Y-m-d');
             // $dateNow = Carbon::parse('2021-10-07')->addDays(1);
-
-            // $retribusi = Retribusi::where([
-            //     // ['mPasar_id', '=' ,$this->getMasterPasar()],
-            //     ['pedagang_id', '=' ,$data['id']]
-            // ])
-            // ->whereBetween('tglBayar_retribusi', [$data['latsPay_retribusi'], $dateNow])
-            // ->get();
 
             if ($dateNow > $sp1 && $dateNow < $sp2) {
                 $sp[] = [
@@ -105,12 +102,39 @@ class DashboardController extends Controller
         });
     }
 
+    public function getChartCount_retributionPerMonth()
+    {
+        $retribution = Retribusi::select(DB::raw('count(id) as `data`'), 
+        DB::raw('sum(tarif) as `sumTarif`'),DB::raw("CONCAT_WS('-',MONTH(created_at),YEAR(created_at)) as monthyear"))
+        ->groupby('monthyear')
+        ->get();
+        
+        $votes  = Lava::DataTable();
+
+        $votes->addStringColumn('Food Poll')
+              ->addNumberColumn('Votes')
+              ->addRow(['Tacos',  rand(1000,5000)])
+              ->addRow(['Salad',  rand(1000,5000)])
+              ->addRow(['Pizza',  rand(1000,5000)])
+              ->addRow(['Apples', rand(1000,5000)])
+              ->addRow(['Fish',   rand(1000,5000)]);
+        
+        Lava::BarChart('Votes', $votes);
+        return $votes;
+    }
+
     public function __invoke(Request $request)
     {
-        // \dd($this->getPeringatan());
+        // \dd($this->getChartCount_retributionPerMonth());
         return view('admin.dashboard', [
-            'lapaks' => Lapak::where('mPasar_id', $this->getMasterPasar()->id)->get(),
-            'pedagangs' => Pedagang::where('mPasar_id', $this->getMasterPasar()->id)->get(),
+            'lapaks' => Lapak::where([
+                ['mPasar_id', '=', $this->getMasterPasar()->id],
+            ])->get(),
+            'pedagangs' => Pedagang::where([
+                ['mPasar_id', '=', $this->getMasterPasar()->id],
+            ])->get(),
+            'pedagang_nonActive' => Pedagang::onlyTrashed()->get(),
+            // 'retribusi_perBulan' => $this->getChartCount_retributionPerMonth()
         ]);
     }
 

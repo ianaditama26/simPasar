@@ -60,24 +60,10 @@ class KelasController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'kelas.*' => 'required',
-            'tarif.*' => 'required'
+            'kelas' => 'required',
         ]);
     
         $kelas = Kelas::create($request->only('kelas'));
-
-        if (!empty($request->tarif)) {
-            foreach($request->tarif as $tarif => $v){
-                $kelasTarif = [
-                    'kelas_id' => $kelas->id,
-                    'zonasi' => $request->zonasi[$tarif],
-                    'tarif' => $request->tarif[$tarif]
-                ];
-                DB::table('tarifs')->insert([
-                    'kelas_id' => $request->kelas
-                ], $kelasTarif);
-            }
-        }
 
         return \redirect()->route('super_admin.master-kelas.index')->with('message', 'Data Kelas Berhasil Ditambahkan');
     }

@@ -6,16 +6,22 @@ use App\Models\MasterData\Lapak;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Pedagang extends Model
 {
-    use HasFactory, SoftDeletes;
-    protected $fillable = ['lapak_id', 'mPasar_id', 'nik', 'nama', 'tempat_tglLahir', 'pekerjaan', 'alamat', 'foto', 'noTelp', 'status'];
+    use HasFactory, SoftDeletes, LogsActivity;
+    protected static $logAttributes = ['lapak_id', 'mPasar_id', 'nik', 'nama', 'tempat_tglLahir', 'pekerjaan', 'alamat', 'foto', 'noTelp', 'status'];
+    protected static $recordEvents = ['deleted', 'updated', 'created'];
 
-    // status => request = request lapak
-    // status => verified = request diterima,
-    // status => revoke => pencabutan,
-    // status => decline => request di tolak
+    protected $fillable = ['lapak_id', 'mPasar_id', 'nik', 'nama', 'tempat_tglLahir', 'pekerjaan', 'alamat', 'foto', 'noTelp', 'status'];
+    protected $dates = ['deleted_at'];
+
+    //? status => request = request lapak
+    //? status => process = request di proses oleh UPT
+    //* status => verified = request diterima, pembuatan tgl kontrak dan no izin lapak,
+    //! status => revoke => pencabutan,
+    //! status => decline => request di tolak
 
     protected $with = ['mPasar', 'lapak'];
 
@@ -51,7 +57,7 @@ class Pedagang extends Model
 
     public function kontrakPedagang()
     {
-        return $this->hasOne(KontrakPedagang::class);
+        return $this->hasOne(KontrakPedagang::class, 'pedagang_id');
     }
 
     public function retribusis()

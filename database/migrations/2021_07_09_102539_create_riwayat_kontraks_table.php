@@ -26,6 +26,8 @@ class CreateRiwayatKontraksTable extends Migration
             $table->string('keterangan');
             $table->string('status')->nullable();
 
+            $table->softDeletes();
+
             $table->timestamps();
         });
     }

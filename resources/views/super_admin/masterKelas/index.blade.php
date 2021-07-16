@@ -27,14 +27,14 @@
                         @enderror
                      </div>
                   </div>
-                  <div class="form-group row">
+                  {{-- <div class="form-group row">
                      <label for="tarif" class="col-sm-3 col-form-label">Tarif
                      <a href="#" class="btn btn-secondary btn-sm" id="addRowBill"><i class="fa fa-plus px-1"></i></a>
                      </label>
                      <div class="col-sm-9">
                         <div id="rowBill"></div>
                      </div>
-                  </div>
+                  </div> --}}
                <div class="card-footer">
                   <button type="submit" class="btn btn-success">Simpan</button>
                </div>
@@ -64,7 +64,6 @@
                         <tr>
                            <th>#</th>
                            <th>Kelas</th>
-                           <th>Tarif</th>
                            <th>Action</th>
                         </tr>
                      </thead>
@@ -85,8 +84,6 @@
 @endpush
 
 @push('scripts')
-   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
 
    <!-- DataTables -->
    <script src="{{ asset('assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
@@ -108,7 +105,6 @@
          columns : [
             {data: 'DT_RowIndex'},
             {data: 'kelas'},
-            {data: 'tarif'},
             {data: 'action'}
          ]
       });

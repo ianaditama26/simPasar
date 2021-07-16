@@ -39,15 +39,15 @@
       </div>
       <div class="col-lg-3 col-md-6 col-sm-6 col-12">
          <div class="card card-statistic-1">
-            <div class="card-icon bg-warning">
-               <i class="fas fa-money-check-alt"></i>
+            <div class="card-icon bg-danger">
+               <i class="fas fa-user-times"></i>
             </div>
             <div class="card-wrap">
                <div class="card-header">
-                  <h4>Total</h4>
+                  <h4>Pedagang Non Aktif</h4>
                </div>
                <div class="card-body">
-                  2
+                  {{ count($pedagang_nonActive) }}
                </div>
             </div>
          </div>
@@ -101,6 +101,20 @@
          </div>
       </div>
    </div>
+
+   {{-- hight chart retribusi --}}
+   <div class="row">
+      <div class="col-lg-12">
+         <div class="card">
+            <div class="card-header">
+               Cahrt
+            </div>
+            <div class="card-body">
+               <div id="container"></div>
+            </div>
+         </div>
+      </div>
+   </div>
 @endsection
 @push('styles')
    <!-- DataTables -->
@@ -120,6 +134,9 @@
 
    <!-- Sweet alert -->
    <script src="{{ asset('assets/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+
+   {{-- Hight cahrt --}}
+   <script src="https://code.highcharts.com/highcharts.js"></script>
 
 <script>
    $(function() {

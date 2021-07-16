@@ -76,8 +76,7 @@ class RetribusiController extends Controller
     {
         return \datatables()->of($this->getKontrakPedagang())
         ->addColumn('action', function(KontrakPedagang $KontrakPedagang){
-            $btn = '<a href="/admin/retribusi/' . $KontrakPedagang->pedagang_id . '" class="btn btn-info" data-toggle="tooltip" data-placement="top" title="Lihat data."><i class="fa fa-eye"></i></a>
-            
+            $btn = '
             <a href="/admin/form/retribusi/' . $KontrakPedagang->id . '" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Edit data."><i class="fa fa-edit"></i></a>
             ';
                 return $btn;
@@ -109,9 +108,15 @@ class RetribusiController extends Controller
         $tglKontrak = $KontrakPedagang->tglKontrak;
 
         $inisialPasar = $this->getMasterPasar()->getInisialPasar();
-        $noUrutAkhir  = Retribusi::max('noFaktur');
-        preg_match_all('!\d+!', $noUrutAkhir, $matches);
-        $noFaktur = 'PS/'.\strtoupper($inisialPasar).'/'.sprintf("%03s", abs($matches[0][0] + 1));
+        $noUrutAkhir  = Retribusi::where('mPasar_id', $this->getMasterPasar()->id)->max('noFaktur');
+        
+        $no = 1;
+        preg_match_all('!\d+!', $noUrutAkhir);
+        if ($noUrutAkhir) {
+            $noFaktur = 'PS/'.\strtoupper($inisialPasar).'/'.sprintf("%03s", abs(preg_match_all('!\d+!', $noUrutAkhir) + 1));
+        } else {
+            $noFaktur = 'PS/'.\strtoupper($inisialPasar).'/'.sprintf("%03s", $noUrutAkhir + 1);
+        }
 
         return \view('admin.retribusi.create', [
             'kontrakPedagang' => $KontrakPedagang,
@@ -166,12 +171,7 @@ class RetribusiController extends Controller
      */
     public function show($id)
     {
-        $pedagang = Pedagang::findOrFail($id);
-
-        return view('admin.retribusi.show', [
-            'pedagang' => $pedagang,
-            'detailRetribusi' => Retribusi::where('pedagang_id', $pedagang->id)->get()
-        ]);
+        // code here
     }
 
     /**
