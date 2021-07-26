@@ -28,6 +28,7 @@ class CreateRetribusisTable extends Migration
             $table->string('noFaktur');
             $table->string('tglBayar_retribusi')->nullable();
             $table->string('tarif')->nullable();
+            $table->string('seri_karcis')->nullable();
             $table->string('status')->default(0);
             $table->softDeletes();
             $table->timestamps();

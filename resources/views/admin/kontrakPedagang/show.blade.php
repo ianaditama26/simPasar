@@ -14,7 +14,13 @@
          <div class="card">
             <div class="card-body">
                <div class="buttons">
-                  <a href="{{ route('admin.riwayat-kontrak.perpajangan', $verifikasiPedagang->id) }}" class="btn btn-icon icon-left btn-light" data-toggle="modal" data-target="#modalRiwayatKontrak"><i class="fas fa-history"></i> Riwayat Kontrak</a>
+
+                  <a href="#" class="btn btn-icon icon-left btn-dark" data-toggle="modal" data-target="#modalFormPencabutan"><i class="fab fa-wpforms"></i> Pencabutan Pedagang</a>
+
+                  <a href="#" class="btn btn-icon icon-left btn-dark" data-toggle="modal" data-target="#modalFormPerpanjang"><i class="fab fa-wpforms"></i> Perpanjang Pedagang</a>
+
+                  <a href="#" class="btn btn-icon icon-left btn-light" data-toggle="modal" data-target="#modalRiwayatKontrak"><i class="fas fa-history"></i> Riwayat Kontrak</a>
+
                </div>
             </div>
          </div>
@@ -119,6 +125,9 @@
             <div class="card">
                <div class="card-header">
                   <h4>Retribusi pedagang</h4>
+                  <div class="card-header-action">
+                     <a href="#" class="btn btn-icon icon-left btn-light" data-toggle="modal" data-target=".bd-example-modal-lg"><i class="fa fa-hand-holding-usd"></i> Detail Retribusi</a></li>
+                  </div>
                </div>
                <div class="card-body">
                   <div id="calendar"></div>
@@ -281,6 +290,41 @@
       </div>
    </div>
 
+   <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h5 class="modal-title">Detail Retribusi</h5>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true">&times;</span>
+               </button>
+            </div>
+            <div class="card-body">
+               <div class="table-responsive">
+                  <table class="table table-striped">
+                     <thead>
+                        <tr>
+                           <th>#</th>
+                           <th>Tanggal</th>
+                           <th>Tarif</th>
+                        </tr>
+                     </thead>
+                     @foreach($detailRetribusi as $retribusi)
+                        <tbody>
+                           <tr>
+                              <td>{{ $loop->iteration }}</td>
+                              <td>{{ $retribusi['date'] }}</td>
+                              
+                           </tr>
+                        </tbody>
+                     @endforeach
+                  </table>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
 
@@ -389,8 +433,8 @@
                   },
                @foreach($detailRetribusi as $v)
                   {
-                     title: '{{ $v->noFaktur }}',
-                     start: '{{ $v->tglBayar_retribusi }}',
+                     title: '',
+                     start: '{{ $v['date'] }}',
                      color: 'lightgreen'
                   },
                @endforeach

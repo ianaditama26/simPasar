@@ -12,6 +12,7 @@ use App\Models\Mpasar\VerifikasiPedagang;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 
 class KontrakPedagangController extends Controller
@@ -95,10 +96,25 @@ class KontrakPedagangController extends Controller
     public function show($id)
     {   
         $verifikasiPedagang = KontrakPedagang::findOrFail($id);
+
+        $retribution = Retribusi::where([
+            ['mPasar_id' ,'=', $this->getMasterPasar()->id],
+            ['pedagang_id', $verifikasiPedagang->pedagang_id],
+        ])
+        ->select([
+            DB::raw('sum(tarif) as tarif'),
+            DB::raw('date(tglBayar_retribusi) as date'),
+        ])
+        ->groupBy('date')
+        ->get()
+        ->keyBy('date');
+        
+        \dd($retribution);
+
         return \view('admin.kontrakPedagang.show', [
             'verifikasiPedagang' => $verifikasiPedagang,
             'contrakHistories' => RiwayatKontrak::where('kontrakPedagang_id', $verifikasiPedagang->id)->latest()->get(),
-            'detailRetribusi' => Retribusi::where('pedagang_id', $verifikasiPedagang->pedagang_id)->get(),
+            'detailRetribusi' => $retribution,
             'ranges' => $this->getRangePaymentRettibution($id),
         ]);
     }

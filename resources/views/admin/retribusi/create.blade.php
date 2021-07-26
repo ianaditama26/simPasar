@@ -97,16 +97,48 @@
                      @enderror
                   </div>
                </div>
+
+               <div class="form-group row">
+                  @php
+                     $jumlahTarif = $kontrakPedagang->pedagang->lapak->tarif;
+
+                     $data2000 = $jumlahTarif % 2000;
+                     $karcis2000 = ($jumlahTarif - $data2000) / 2000;
+
+                     $data1000 = $jumlahTarif % 1000;
+                     $karcis1000 = ($data2000 - $data1000) / 1000;
+
+                     $data500 = $data1000 % 500;
+                     $karcis500 = ($data1000 - $data500) / 500;
+                  @endphp
+                  <div class="col-sm-3">
+                     Tarif {{  $kontrakPedagang->pedagang->lapak->tarif }}
+                  </div>
+                  <div class="col-sm-3">
+                     Karcis F 2000 {{ $karcis2000 }}x
+                  </div>
+                  <div class="col-sm-3">
+                     Karcis K 1000 {{ $karcis1000 }}x
+                  </div>
+                  <div class="col-sm-3">
+                     Karcis Q 500 {{ $karcis500 }}x
+                  </div>
+               </div>
             </div>
-            <div class="card-footer">
-               {{-- INPUT HIDDEN --}}
+               {{-- INPUT HIDDEN ID --}}
                <input type="hidden" name="mPasar_id" value="{{ $kontrakPedagang->mPasar_id }}">
                <input type="hidden" name="pedagang_id" value="{{ $kontrakPedagang->pedagang_id }}">
                <input type="hidden" name="lapak_id" value="{{ $kontrakPedagang->pedagang->lapak->id }}">
                <input type="hidden" name="tarif" value="{{ $kontrakPedagang->pedagang->lapak->tarif }}">
-               
-               <button type="submit" class="btn btn-success">Bayar</button>
-            </div>
+
+               {{-- INPUT HIDDEN KARCIS --}}
+               <input type="hidden" name="karcis2000" value="{{ $karcis2000 }}">
+               <input type="hidden" name="karcis1000" value="{{ $karcis1000 }}">
+               <input type="hidden" name="karcis500" value="{{ $karcis500 }}">
+
+               <div class="card-footer">
+                  <button type="submit" class="btn btn-success">Bayar</button>
+               </div>
             </form>
          </div>
       </div>

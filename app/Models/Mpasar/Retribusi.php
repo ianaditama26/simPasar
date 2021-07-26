@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 class Retribusi extends Model
 {
     use HasFactory;
-    protected $fillable = ['mPasar_id', 'pedagang_id', 'lapak_id', 'noFaktur' ,'tglBayar_retribusi','tarif', 'status'];
+    protected $fillable = ['mPasar_id', 'pedagang_id', 'lapak_id', 'noFaktur' ,'tglBayar_retribusi','tarif', 'seri_karcis','status'];
     protected $with = ['mPasar', 'pedagang', 'lapak'];
 
     public function mPasar()

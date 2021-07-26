@@ -128,7 +128,6 @@ class RetribusiController extends Controller
 
     public function store(Request $request)
     {
-        
         if ($request->finish < $request->start) {
             return \redirect()->back()->with('message', 'Format tanggal pembayaran tidak benar !');
         }
@@ -137,7 +136,8 @@ class RetribusiController extends Controller
         $dateRange = CarbonPeriod::create($start, $finish);
         $create = [];
 
-        if ($request->start) {
+        //create karcis2000 E
+        if ($request->karcis2000 != 0) {
             foreach($dateRange as $date) {
                 $create = [
                     'mPasar_id' => $request->mPasar_id,
@@ -145,22 +145,59 @@ class RetribusiController extends Controller
                     'lapak_id' => $request->lapak_id,
                     'noFaktur' => $request->noFaktur,
                     'tglBayar_retribusi' => $date->format('Y-m-d'),
-                    'tarif' => $request->tarif
+                    'tarif' => 2000,
+                    'seri_karcis' => 'e'
                 ];
                 $retribusi = Retribusi::updateOrCreate([
                     'pedagang_id' => $request->pedagang_id,
                     'tglBayar_retribusi' => $date->format('Y-m-d'),
                     'noFaktur' => $request->noFaktur,
+                    'seri_karcis' => 'e'
                 ], $create);
             }
-        }
+        } 
+         //create karcis 1000 K
+        if($request->karcis1000 != 0) {
+            foreach($dateRange as $date) {
+                $create = [
+                    'mPasar_id' => $request->mPasar_id,
+                    'pedagang_id' => $request->pedagang_id,
+                    'lapak_id' => $request->lapak_id,
+                    'noFaktur' => $request->noFaktur,
+                    'tglBayar_retribusi' => $date->format('Y-m-d'),
+                    'tarif' => 1000,
+                    'seri_karcis' => 'k'
+                ];
+                $retribusi = Retribusi::updateOrCreate([
+                    'pedagang_id' => $request->pedagang_id,
+                    'tglBayar_retribusi' => $date->format('Y-m-d'),
+                    'noFaktur' => $request->noFaktur,
+                    'seri_karcis' => 'k'
+                ], $create);
+            }
+        } 
+        //create karcis 500 Q
+        if($request->karcis500 != 0) {
+            foreach($dateRange as $date) {
+                $create = [
+                    'mPasar_id' => $request->mPasar_id,
+                    'pedagang_id' => $request->pedagang_id,
+                    'lapak_id' => $request->lapak_id,
+                    'noFaktur' => $request->noFaktur,
+                    'tglBayar_retribusi' => $date->format('Y-m-d'),
+                    'tarif' => 500,
+                    'seri_karcis' => 'q'
+                ];
+                $retribusi = Retribusi::updateOrCreate([
+                    'pedagang_id' => $request->pedagang_id,
+                    'tglBayar_retribusi' => $date->format('Y-m-d'),
+                    'noFaktur' => $request->noFaktur,
+                    'seri_karcis' => 'q'
+                ], $create);
+            }
+        } 
         
-        return view('admin.retribusi.invoice', [
-            'retribusi' => $retribusi,
-            'dari' => $request->start,
-            'sampai' => $request->finish,
-            'hari' => \count($dateRange)
-        ]);
+        return Redirect::route('admin.retribusi.index');
     }
 
     /**
@@ -206,10 +243,5 @@ class RetribusiController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    public function FunctionName(Type $var = null)
-    {
-        # code...
     }
 }

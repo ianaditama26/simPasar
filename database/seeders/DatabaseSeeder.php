@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
             MasterDataSeeder::class,
             MasterPasarSeed::class,
             MasterLapakSeed::class,
-            PedagangSeeder::class,
+            // PedagangSeeder::class,
             RoleSeed::class,
             UserSeed::class,
         ]);

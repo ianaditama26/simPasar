@@ -201,7 +201,7 @@ class PedagangController extends Controller
     public function prosesRequest_lapak($id)
     {
         $pedagang = Pedagang::findOrFail($id);
-        $pedagang->status->update(['status' => 'process']);
+        $pedagang->update(['status' => 'process']);
         $pedagang->statusPedagang->update(['isProcess_pasar' => 'ok']);
         return \redirect()->back();
     }
