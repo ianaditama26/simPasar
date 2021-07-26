@@ -26,7 +26,7 @@ class MasterDataSeeder extends Seeder
                 'zonaLapak' => 'emperan',
             ],
             [
-                'zonaLapak' => 'bidak',
+                'zonaLapak' => 'bedak',
             ],
         ];
         ZonaLapak::insert($zonaLapak);

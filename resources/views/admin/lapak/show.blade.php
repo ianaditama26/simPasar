@@ -24,7 +24,7 @@
                <div class="form-group row">
                   <label for="alamat" class="col-sm-2 col-form-label">Tarif</label>
                   <div class="col-sm-10">
-                     {{ $lapak->tarif }} | {{ $lapak->zonasi }}
+                     {{ $lapak->tarif }} | {{ $lapak->zonasi }} | {{ $lapak->seri }}
                   </div>
                </div>
                <div class="form-group row">

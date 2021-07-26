@@ -18,7 +18,8 @@ class MasterLapakSeed extends Seeder
         $lapakPasar1 = [
             [
                 'mPasar_id' => 1,
-                'tarif' => 4000,
+                'tarif' => 500,
+                'seri' => 'q',
                 'zonasi' => 'emperan',
                 'komoditas' => 'sayur',
                 'noLapak' => 01,
@@ -29,7 +30,8 @@ class MasterLapakSeed extends Seeder
             ],
             [
                 'mPasar_id' => 1,
-                'tarif' => 4000,
+                'tarif' => 500,
+                'seri' => 'q',
                 'zonasi' => 'emperan',
                 'komoditas' => 'sayur',
                 'noLapak' => 02,
@@ -40,7 +42,8 @@ class MasterLapakSeed extends Seeder
             ],
             [
                 'mPasar_id' => 1,
-                'tarif' => 4000,
+                'tarif' => 500,
+                'seri' => 'q',
                 'zonasi' => 'emperan',
                 'komoditas' => 'sayur',
                 'noLapak' => 03,
@@ -51,7 +54,8 @@ class MasterLapakSeed extends Seeder
             ],
             [
                 'mPasar_id' => 1,
-                'tarif' => 4000,
+                'tarif' => 500,
+                'seri' => 'q',
                 'zonasi' => 'emperan',
                 'komoditas' => 'sayur',
                 'noLapak' => 04,
@@ -62,7 +66,8 @@ class MasterLapakSeed extends Seeder
             ],
             [
                 'mPasar_id' => 1,
-                'tarif' => 4000,
+                'tarif' => 500,
+                'seri' => 'q',
                 'zonasi' => 'emperan',
                 'komoditas' => 'sayur',
                 'noLapak' => 05,
@@ -74,7 +79,8 @@ class MasterLapakSeed extends Seeder
 
             [
                 'mPasar_id' => 1,
-                'tarif' => 10000,
+                'tarif' => 1000,
+                'seri' => 'k',
                 'zonasi' => 'bidak',
                 'komoditas' => 'daging',
                 'noLapak' => 'D01',
@@ -86,7 +92,8 @@ class MasterLapakSeed extends Seeder
 
             [
                 'mPasar_id' => 1,
-                'tarif' => 10000,
+                'tarif' => 1000,
+                'seri' => 'k',
                 'zonasi' => 'bidak',
                 'komoditas' => 'daging',
                 'noLapak' => 'D02',
@@ -98,7 +105,8 @@ class MasterLapakSeed extends Seeder
 
             [
                 'mPasar_id' => 1,
-                'tarif' => 10000,
+                'tarif' => 1000,
+                'seri' => 'k',
                 'zonasi' => 'bidak',
                 'komoditas' => 'daging',
                 'noLapak' => 'D03',
@@ -114,7 +122,8 @@ class MasterLapakSeed extends Seeder
         $lapakPasar2 = [
             [
                 'mPasar_id' => 2,
-                'tarif' => 4000,
+                'tarif' => 500,
+                'seri' => 'q',
                 'zonasi' => 'emperan',
                 'komoditas' => 'sayur',
                 'noLapak' => 01,
@@ -125,7 +134,8 @@ class MasterLapakSeed extends Seeder
             ],
             [
                 'mPasar_id' => 2,
-                'tarif' => 4000,
+                'tarif' => 500,
+                'seri' => 'q',
                 'zonasi' => 'emperan',
                 'komoditas' => 'sayur',
                 'noLapak' => 02,
@@ -136,7 +146,8 @@ class MasterLapakSeed extends Seeder
             ],
             [
                 'mPasar_id' => 2,
-                'tarif' => 4000,
+                'tarif' => 500,
+                'seri' => 'q',
                 'zonasi' => 'emperan',
                 'komoditas' => 'sayur',
                 'noLapak' => 03,
@@ -147,7 +158,8 @@ class MasterLapakSeed extends Seeder
             ],
             [
                 'mPasar_id' => 2,
-                'tarif' => 4000,
+                'tarif' => 500,
+                'seri' => 'q',
                 'zonasi' => 'emperan',
                 'komoditas' => 'sayur',
                 'noLapak' => 04,
@@ -158,7 +170,8 @@ class MasterLapakSeed extends Seeder
             ],
             [
                 'mPasar_id' => 2,
-                'tarif' => 4000,
+                'tarif' => 500,
+                'seri' => 'q',
                 'zonasi' => 'emperan',
                 'komoditas' => 'sayur',
                 'noLapak' => 05,
@@ -170,7 +183,8 @@ class MasterLapakSeed extends Seeder
 
             [
                 'mPasar_id' => 2,
-                'tarif' => 10000,
+                'tarif' => 1000,
+                'seri' => 'k',
                 'zonasi' => 'bidak',
                 'komoditas' => 'daging',
                 'noLapak' => 'D01',
@@ -182,7 +196,8 @@ class MasterLapakSeed extends Seeder
 
             [
                 'mPasar_id' => 2,
-                'tarif' => 10000,
+                'tarif' => 1000,
+                'seri' => 'k',
                 'zonasi' => 'bidak',
                 'komoditas' => 'daging',
                 'noLapak' => 'D02',
@@ -194,7 +209,8 @@ class MasterLapakSeed extends Seeder
 
             [
                 'mPasar_id' => 2,
-                'tarif' => 10000,
+                'tarif' => 1000,
+                'seri' => 'k',
                 'zonasi' => 'bidak',
                 'komoditas' => 'daging',
                 'noLapak' => 'D03',

@@ -53,11 +53,23 @@ class RouteServiceProvider extends ServiceProvider
                 ->name('super_admin.')
                 ->group(\base_path('routes/superAdmin.php'));
 
-            Route::middleware('web', 'auth', 'role:admin')
+            Route::middleware('web', 'auth', 'role:admin|diskomindag|upt')
                 ->namespace($this->namespace . '\Admin')
                 ->prefix('admin')
                 ->name('admin.')
                 ->group(\base_path('routes/admin.php'));
+
+            Route::middleware('web', 'auth', 'role:diskomindag')
+                ->namespace($this->namespace . '\Diskomindag')
+                ->prefix('diskomindag')
+                ->name('diskomindag.')
+                ->group(\base_path('routes/diskomindag.php'));
+
+            Route::middleware('web', 'auth', 'role:upt')
+                ->namespace($this->namespace . '\Upt')
+                ->prefix('upt')
+                ->name('upt.')
+                ->group(\base_path('routes/upt.php'));
         });
     }
 

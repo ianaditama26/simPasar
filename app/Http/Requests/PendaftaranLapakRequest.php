@@ -26,6 +26,7 @@ class PendaftaranLapakRequest extends FormRequest
         return [
             'mPasar_id' => 'required',
             'tarif' => 'required',
+            'seri' => 'required',
             'komoditas' => 'required',
             'noLapak' => 'required',
             'luas' => 'required',

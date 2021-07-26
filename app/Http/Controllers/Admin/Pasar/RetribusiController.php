@@ -77,7 +77,7 @@ class RetribusiController extends Controller
         return \datatables()->of($this->getKontrakPedagang())
         ->addColumn('action', function(KontrakPedagang $KontrakPedagang){
             $btn = '
-            <a href="/admin/form/retribusi/' . $KontrakPedagang->id . '" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Edit data."><i class="fa fa-edit"></i></a>
+            <a href="/admin/form/retribusi/' . $KontrakPedagang->id . '" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Edit data."><i class="fa fa-hand-holding-usd"></i></a>
             ';
                 return $btn;
         })
@@ -113,7 +113,7 @@ class RetribusiController extends Controller
         $no = 1;
         preg_match_all('!\d+!', $noUrutAkhir);
         if ($noUrutAkhir) {
-            $noFaktur = 'PS/'.\strtoupper($inisialPasar).'/'.sprintf("%03s", abs(preg_match_all('!\d+!', $noUrutAkhir) + 1));
+            $noFaktur = 'PS/'.\strtoupper($inisialPasar).'/'.sprintf("%03s", abs(preg_replace("/[^0-9]/", "", $noUrutAkhir) + 1));
         } else {
             $noFaktur = 'PS/'.\strtoupper($inisialPasar).'/'.sprintf("%03s", $noUrutAkhir + 1);
         }

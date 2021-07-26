@@ -3,6 +3,7 @@
 namespace App\Models\Mpasar;
 
 use App\Models\MasterData\Lapak;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -18,12 +19,12 @@ class Pedagang extends Model
     protected $dates = ['deleted_at'];
 
     //? status => request = request lapak
-    //? status => process = request di proses oleh UPT
     //* status => verified = request diterima, pembuatan tgl kontrak dan no izin lapak,
     //! status => revoke => pencabutan,
-    //! status => decline => request di tolak
+    //! status => Denied => request di tolak
+    //! status => nonActive => pedagang sudah di cabut
 
-    protected $with = ['mPasar', 'lapak'];
+    protected $with = ['mPasar', 'lapak', 'statusPedagang'];
 
     public function mPasar()
     {
@@ -44,10 +45,12 @@ class Pedagang extends Model
     {
         if ($this->status == 'request') {
             $status = 'Request Lapak';
+        } elseif($this->status == 'process' ) {
+            $status = 'Process';
         } elseif($this->status == 'verified' ) {
             $status = 'Verified';
-        } elseif($this->status == 'decilne' ) {
-            $status = 'Decline';
+        } elseif($this->status == 'denied' ) {
+            $status = 'Denied';
         } else {
             $status = 'Revoke';
         }
@@ -63,5 +66,15 @@ class Pedagang extends Model
     public function retribusis()
     {
         return $this->hasMany(Retribusi::class, 'pedagang_id');
+    }
+
+    public function getCreated()
+    {
+        return Carbon::parse($this->created_at)->format('d-m-Y');
+    }
+
+    public function statusPedagang()
+    {
+        return $this->hasOne(StatusPedagang::class, 'pedagang_id');
     }
 }

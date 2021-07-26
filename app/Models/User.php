@@ -23,6 +23,7 @@ class User extends Authenticatable
 
     protected static $logAttributes = ['name', 'email'];
     protected static $recordEvents = ['deleted', 'updated', 'created'];
+    protected static $logName = 'user';
     
     protected $fillable = [
         'name',
@@ -51,5 +52,10 @@ class User extends Authenticatable
     public function pasar()
     {
         return $this->hasOne(Pasar::class, 'id', 'pasar_id');
+    }
+
+    public function getDescriptionForEvent(string $eventName): string
+    {
+        return "You have {$eventName} user data";
     }
 }

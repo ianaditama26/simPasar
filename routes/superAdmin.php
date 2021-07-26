@@ -50,3 +50,11 @@ Route::get('dt/master-kelas', 'MasterData\KelasController@dtKelas')->name('dt.ma
    |--------------------------------------------------------------------------
 */
 Route::resource('user', 'MasterData\UserController');
+
+/*
+   |--------------------------------------------------------------------------
+   | Log activity
+   |--------------------------------------------------------------------------
+*/
+Route::get('log-activity', 'LogActivityController@index')->name('log-activity.index');
+Route::get('dt/log-activity', 'LogActivityController@dtLogActivity')->name('dt.log-activity');

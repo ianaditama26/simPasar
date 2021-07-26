@@ -1,5 +1,5 @@
 @extends('template.coreTemplate')
-@section('title', 'Buat Data Pedagang')
+@section('title', 'Buat Data Kontrak Pedagang')
 @section('breadcrumb')
    <div class="section-header-breadcrumb">
       <div class="breadcrumb-item active"><a href="/admin">Dashboard</a></div>

@@ -13,9 +13,11 @@
             <div class="card-header">
                <h4>Data Pedagang</h4>
                <div class="card-header-action">
-                  <a href="{{ route('admin.pedagang.create') }}" class="btn btn-primary">
-                     Buat Data Pedagang
-                  </a>
+                  @role('admin')
+                     <a href="{{ route('admin.pedagang.create') }}" class="btn btn-primary">
+                        Buat Data Pedagang
+                     </a>
+                  @endrole
                </div>
             </div>
             <div class="card-body">

@@ -18,6 +18,7 @@ class CreateLapaksTable extends Migration
             $table->unsignedBigInteger('mPasar_id');
             $table->foreign('mPasar_id')->on('master_pasars')->references('id');
             $table->unsignedBigInteger('tarif');
+            $table->string('seri');
             $table->string('zonasi');
             $table->string('komoditas');
             $table->string('noLapak');

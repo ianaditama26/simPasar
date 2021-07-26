@@ -14,17 +14,7 @@
          <div class="card">
             <div class="card-body">
                <div class="buttons">
-                  <a href="/{{ request()->segment(1) }}/{{ request()->segment(2) }}/{{ $verifikasiPedagang->id }}/edit" class="btn btn-icon icon-left btn-success"><i class="fa fa-edit"></i> Edit</a>
-
-                  <button type="submit" class="btn btn-icon icon-left btn-danger" style="display: inline" id="delete" class="btn btn-icon icon-left btn-dark" data-id="{{ $verifikasiPedagang->id }}">
-                  <i class="fa fa-trash"> Hapus</i>
-                  </button>
-
                   <a href="{{ route('admin.riwayat-kontrak.perpajangan', $verifikasiPedagang->id) }}" class="btn btn-icon icon-left btn-light" data-toggle="modal" data-target="#modalRiwayatKontrak"><i class="fas fa-history"></i> Riwayat Kontrak</a>
-                  
-                  <a href="#" class="btn btn-icon icon-left btn-dark" data-toggle="modal" data-target="#modalFormPerpanjang"><i class="fas fa-file-contract"></i> Perpanjang Kontrak</a>
-
-                  <a href="#" class="btn btn-icon icon-left btn-dark" data-toggle="modal" data-target="#modalFormPencabutan"><i class="fas fa-file-contract"></i> Pencabutan Kontrak</a>
                </div>
             </div>
          </div>
@@ -108,13 +98,13 @@
                      <div class="form-group row">
                         <label for="pekerjaan" class="col-sm-4 col-form-label">Tanggal Kontrak</label>
                         <div class="col-sm-8">
-                           {{ $verifikasiPedagang->tglKontrak }}
+                           {{ \Carbon\Carbon::parse($verifikasiPedagang->tglKontrak)->translatedFormat('d F Y') }}
                         </div>
                      </div>
                      <div class="form-group row">
                         <label for="pekerjaan" class="col-sm-4 col-form-label">Tanggal Akhir Kontrak</label>
                         <div class="col-sm-8">
-                           {{ $verifikasiPedagang->akhirKontrak }}
+                           {{ \Carbon\Carbon::parse($verifikasiPedagang->akhirKontrak)->translatedFormat('d F Y') }}
                         </div>
                      </div>
                   </div>
@@ -157,7 +147,7 @@
                         @foreach($ranges as $date)
                            <tr>
                               <td>{{ $no++ }}</td>
-                              <td>{{ $date['date'] }}</td>
+                              <td>{{\Carbon\Carbon::parse($date['date'])->translatedFormat('d F Y') }}</td>
                               <td>{{ $date['tarif'] }}</td>
                            </tr>
                         @endforeach

@@ -44,6 +44,10 @@ class LoginController extends Controller
             return '/super_admin';
         } else if (\auth()->user()->hasRole('admin')) {
             return '/admin';
+        } else if(\auth()->user()->hasRole('diskomindag')) {
+            return '/diskomindag';
+        } else if(\auth()->user()->hasRole('upt')) {
+            return '/upt';
         } else {
             return $this->redirectTo;
         }

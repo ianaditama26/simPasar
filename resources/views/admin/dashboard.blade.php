@@ -69,50 +69,96 @@
       </div>
    </div>
 
-   {{--  --}}
    <div class="row">
-      <div class="col-lg-10 col-md-12 col-12 col-sm-12">
+      <div class="col-lg-6">
          <div class="card">
             <div class="card-header">
-               <h4>Tagihan retribusi pedagang</h4>
-               <div class="card-header-action">
-                  <div class="btn-group">
-                     <a href="#" class="btn btn-primary">Week</a>
-                     <a href="#" class="btn">Month</a>
-                  </div>
-               </div>
+               <h4>Retribusi perminggu</h4> 
+               {{ \Carbon\Carbon::now()->startOfWeek()->translatedFormat('d F Y') }} - {{ \Carbon\Carbon::now()->endOfWeek()->translatedFormat('d F Y') }}
             </div>
             <div class="card-body">
-               <div class="table-responsive">
-                  <table id="dataTable" class="table table-bordered table-striped">
+               <div class="table-responsive" style="font-size:12px;">
+                  <table class="table table-striped">
                      <thead>
-                        <tr>
-                           <th>#</th>
-                           <th>Nik</th>
-                           <th>Nama</th>
-                           <th>Tgl pembayaran terakhir</th>
-                           <th>Keterangan</th>
-                           <th>Action</th>
-                        </tr>
+                        <th>#</th>
+                        <th>Tanggal</th>
+                        <th>Jumlah</th>
                      </thead>
+                     @foreach($retribusi_perWeeks as $retribusi)
+                        <tbody class="text-xs">
+                           <tr>
+                              <td>{{ $loop->iteration }}</td>
+                              <td>{{ \Carbon\Carbon::parse($retribusi->date)->translatedFormat('D, d F Y') }}</td>
+                              <td>{{ number_format($retribusi->sumTarif, 0, ',', '.') }}</td>
+                           </tr>
+                        </tbody>
+                     @endforeach
                   </table>
                </div>
             </div>
          </div>
       </div>
-   </div>
 
-   {{-- hight chart retribusi --}}
-   <div class="row">
-      <div class="col-lg-12">
+      <div class="col-lg-6">
          <div class="card">
             <div class="card-header">
-               Cahrt
+               <h4>Retribusi Per Bulan Dalam Satu Tahun</h4>
             </div>
             <div class="card-body">
-               <div id="container"></div>
+               <div class="table-responsive">
+                  <table class="table table-striped" style="font-size:12px;">
+                     <thead>
+                        <th>#</th>
+                        <th>Bulan</th>
+                        <th>Data</th>
+                        <th>Jumlah</th>
+                     </thead>
+                     @foreach($retribusi_perMonths as $retribusi)
+                        <tbody class="text-xs">
+                           <tr>
+                              <td>{{ $loop->iteration }}</td>
+                              <td>
+                                 @if($retribusi->month == 1)
+                                    Januari
+                                 @elseif($retribusi->month == 2)
+                                    Februari
+                                 @elseif($retribusi->month == 3)
+                                    Maret
+                                 @elseif($retribusi->month == 4)
+                                    April
+                                 @elseif($retribusi->month == 5)
+                                    Mei
+                                 @elseif($retribusi->month == 6)
+                                    Jani
+                                 @elseif($retribusi->month == 7)
+                                    Juli
+                                 @elseif($retribusi->month == 8)
+                                    Agustus
+                                 @elseif($retribusi->month == 9)
+                                    September
+                                 @elseif($retribusi->month == 10)
+                                    Oktober
+                                 @elseif($retribusi->month == 11)
+                                    November
+                                 @elseif($retribusi->month == 12)
+                                    Desember
+                                 @else
+                                    Not data
+                                 @endif
+                              </td>
+                              <td>{{ $retribusi->data }}</td>
+                              <td>{{ number_format($retribusi->sumTarif, 0, ',', '.') }}</td>
+                           </tr>
+                        </tbody>
+                     @endforeach
+                  </table>
+               </div>
             </div>
          </div>
+      </div>
+
+      <div class="col-lg-3">
+
       </div>
    </div>
 @endsection
@@ -137,65 +183,4 @@
 
    {{-- Hight cahrt --}}
    <script src="https://code.highcharts.com/highcharts.js"></script>
-
-<script>
-   $(function() {
-      $('#dataTable').DataTable({
-         "processing": true,
-         "serverSide": true,
-         "responsive": true,
-         "autoWidth": true,
-         ajax: '{{ route('admin.dt.pedagangSp') }}',
-         columns : [
-            {data: 'DT_RowIndex'},
-            {data: 'nik'},
-            {data: 'name'},
-            {data: 'lastPay'},
-            {data: 'status'},
-            {data: 'action'}
-         ]
-      });
-
-      $('#dataTable').on('click', '#delete', function(e){
-         e.preventDefault();
-         var id = $(this).data('id'); //ambil dari data-id
-
-         Swal.fire({
-            title: 'Yakin hepus data ini?',
-            text: "Data yang terhapus tidak bisa dikembalikan!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya, hapus!',
-            cancelButtonText: 'Batalkan!',
-            }).then((result) => {
-            if (result.value) {
-               $.ajax({
-                     type: "DELETE",
-                     url: "/admin/kontrak/" + id,
-                     data: {
-                        "id": id,
-                        "_token": "{{ csrf_token() }}"
-                     }, 
-
-                     //setelah berhasil hapus data
-                     success: function(data){
-                        if(data.success === true){
-                           Swal.fire('Erase Data!', data.message, 'success')
-                           location.reload(true);
-                        } else {
-                           Swal.fire({
-                           icon: 'error',
-                           title: 'Oops...',
-                           text: data.message
-                           })
-                        }
-                     },
-               });
-            }
-         })
-      });
-   })
-</script>
 @endpush

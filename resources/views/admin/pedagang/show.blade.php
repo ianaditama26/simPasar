@@ -14,37 +14,48 @@
             <div class="card-header">
                <h4>Detail Data</h4>
                <div class="buttons">
-                  <a href="/{{ request()->segment(1) }}/{{ request()->segment(2) }}/{{ $pedagang->id }}/edit" class="btn btn-icon icon-left btn-success"><i class="fa fa-edit"></i> Edit</a>
+                  @role('admin')
+                     <a href="/{{ request()->segment(1) }}/{{ request()->segment(2) }}/{{ $pedagang->id }}/edit" class="btn btn-icon icon-left btn-success"><i class="fa fa-edit"></i> Edit</a>
 
-                  <button type="submit" class="btn btn-icon icon-left btn-danger" id="delete" data-id="{{ $pedagang->id }}">
-                  <i class="fa fa-trash"></i> Hapus
-                  </button>
+                     <button type="submit" class="btn btn-icon icon-left btn-danger" id="delete" data-id="{{ $pedagang->id }}">
+                     <i class="fa fa-trash"></i> Hapus
+                     </button>
 
-                  @if($pedagang->status != 'verified')
-                     <a href="{{ route('admin.verifikasiForm.create', $pedagang->id) }}" class="btn btn-icon icon-left btn-info" >
-                     <i class="fas fa-file-contract"></i> Verifikas Pedagang
+                     @if($pedagang->status == 'request')
+                        <a href="{{ route('admin.prosesRequest.lapak', $pedagang->id) }}" class="btn btn-icon icon-left btn-info" >
+                        <i class="fas fa-file-contract"></i> Proses request pedagang
+                        </a>
+                     @elseif($pedagang->status == 'verified')
+                        <a href="{{ route('admin.verifikasiForm.create', $pedagang->id) }}" class="btn btn-icon icon-left btn-success" >
+                        <i class="fas fa-file-contract"></i> Penerbitan izin kontrak
+                        </a>
+                     @endif
+                  @endrole
+
+                  @role('diskomindag')
+                     <a href="{{ route('diskomindag.verified.pedagang', $pedagang->id) }}" class="btn btn-icon icon-left btn-success" >
+                        <i class="fas fa-file-contract"></i> Verifikasi lapak pedagang
                      </a>
-                  @endif
+
+                     <a href="{{ route('diskomindag.denied.pedagang', $pedagang->id) }}" class="btn btn-icon icon-left btn-danger" >
+                     <i class="fas fa-file-contract"></i> Verifikasi ditolak
+                     </a>
+                  @endrole
+
+                  @role('upt')
+                     <a href="{{ route('upt.statusPedagang.isVefied_upt', $pedagang->id) }}" class="btn btn-icon icon-left btn-success" >
+                        <i class="fas fa-file-contract"></i> Verifikasi lapak pedagang
+                     </a>
+
+                     <a href="{{ route('upt.denied.pedagang', $pedagang->id) }}" class="btn btn-icon icon-left btn-danger" >
+                     <i class="fas fa-file-contract"></i> Verifikasi ditolak
+                     </a>
+                  @endrole
                </div>
             </div>
             <div class="card-body">
-               @if($pedagang->status == 'request')
-                     <div class="alert alert-info">
-                           Status request lapak.
-                     </div>
-                  @elseif($pedagang->status == 'verified')
-                     <div class="alert alert-success">
-                           Status pedagang verifikasi.
-                     </div>
-                  @elseif($pedagang->status == 'revoke')
-                     <div class="alert alert-danger">
-                        Status pedagang non aktif.
-                     </div>
-                  @elseif($pedagang->status == 'decline')
-                     <div class="alert alert-warning">
-                        Status pedagang request di tolak.
-                     </div>
-               @endif
+               {{-- Status pedagang --}}
+               @include('admin.pedagang.cardStatus.card')
                <div class="row">
                   <div class="col-md-7">
                      <div class="form-group row">
@@ -120,6 +131,12 @@
                            <b>{{ $pedagang->getStatus() }}</b>
                         </div>
                      </div>
+                     <div class="form-group row">
+                        <label for="jenidDagangan" class="col-sm-4 col-form-label">Tanggal daftar</label>
+                        <div class="col-sm-8">
+                           {{ $pedagang->getCreated() }}
+                        </div>
+                     </div>
                   </div>
                </div>
             </div>
@@ -169,7 +186,7 @@
                      success: function(data){
                         if(data.success === true){
                            Swal.fire('Erase Data!', data.message, 'success')
-                           location = 'admin/pedagang';
+                           location.href = 'admin/pedagang';
                         } else {
                            Swal.fire({
                            icon: 'error',

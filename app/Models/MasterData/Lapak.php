@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 class Lapak extends Model
 {
     use HasFactory;
-    protected $fillable = ['mPasar_id', 'tarif' ,'komoditas', 'zonasi', 'noLapak', 'luas', 'statusLapak'];
+    protected $fillable = ['mPasar_id', 'tarif','seri' ,'komoditas', 'zonasi', 'noLapak', 'luas', 'statusLapak'];
 
     // statusLapak = 0 (lapak siap di booking)
     // statusLapak = 1 (booking lapak)

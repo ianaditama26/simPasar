@@ -17,6 +17,11 @@ Route::get('/create-table', function(){
    echo "oke";
 });
 
+// /diskomindag
+Route::get('/diskomindag', function(){
+   return '/diskomindag';
+});
+
 /*
    |--------------------------------------------------------------------------
    | Menejement Pasar
@@ -40,7 +45,16 @@ Route::get('dt/lapak', 'pasar\LapakController@dtLapak')->name('dt.lapak');
 */
 Route::resource('pedagang', 'pasar\PedagangController');
 Route::get('dt/pedagang', 'pasar\PedagangController@dtPedagang')->name('dt.pedagang');
+
+// recyclePedagang
+Route::get('daur-ulang/pedagang', 'pasar\PedagangController@recyclePedagang')->name('pedagang.recyclePedagang');
+Route::get('dt/daur-ulang/pedagang', 'pasar\PedagangController@dtRecyclePedagang')->name('dt.recyclePedagang');
+//restore pedagang
+Route::get('restore/pedagang/{id}', 'pasar\PedagangController@restorePedagang');
+
 Route::get('sp/pedagang/detail/{id}', 'pasar\PedagangController@spPedagang_detail');
+//? proses request lapak
+Route::get('proses/request/pedagang/{id}', 'pasar\PedagangController@prosesRequest_lapak')->name('prosesRequest.lapak');
 
 /*
    |--------------------------------------------------------------------------
@@ -49,6 +63,7 @@ Route::get('sp/pedagang/detail/{id}', 'pasar\PedagangController@spPedagang_detai
 */
 Route::resource('kontrak', 'pasar\KontrakPedagangController');
 Route::get('dt/kontrak/verifikasi', 'pasar\KontrakPedagangController@dtKontrak_Verifikasi')->name('dt.kontrakVerifikasi');
+//verifikasi lapak
 Route::get('form/verifikasi/pedagang/{id}', 'pasar\KontrakPedagangController@formVerifikasiPedagang')->name('verifikasiForm.create');
 // perpanjang kontrak
 Route::post('kontrak-pedagang/perpanjang', 'pasar\KontrakPedagangController@perpanjangan')->name('riwayat-kontrak.perpajangan');
@@ -83,4 +98,12 @@ Route::get('riwayat/pedagang/{id}', 'pasar\RiwayatKontrakController@show')->name
    |--------------------------------------------------------------------------
 */
 Route::get('layout/lapak', 'pasar\LayoutLapakController@index')->name('layout.lapak');
+
+/*
+   |--------------------------------------------------------------------------
+   | Pelanggaran pedagang
+   |--------------------------------------------------------------------------
+*/
+Route::get('pelanggara/pedagang', 'pasar\PelanggaranPedagangController@index')->name('pelanggaran.index');
+Route::get('dt/pedagang/sp', 'pasar\PelanggaranPedagangController@dtPedagangSp')->name('dt.pedagangSp');
 

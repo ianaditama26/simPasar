@@ -9,6 +9,7 @@ use App\Models\MasterData\ZonaLapak;
 use App\Models\Mpasar\KontrakPedagang;
 use App\Models\Mpasar\MasterPasar;
 use App\Models\Mpasar\Pedagang;
+use App\Models\Mpasar\StatusPedagang;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 
@@ -30,21 +31,25 @@ class PedagangController extends Controller
         $pedagang = Pedagang::with('mPasar', 'lapak')->where([
             ['mPasar_id', '=' ,$this->getMasterPasar()->id],
         ])->orderBy('created_at', 'asc')->get();
+        
         return \datatables()->of($pedagang)
         ->addColumn('action', 'template.partials.DT-action')
         ->addColumn('status', function(Pedagang $pedagang){
             if ($pedagang->status == 'request') {
                 $status = '<font style
                 ="color:blue;font-weight:bold;">Request Lapak</font>';
+            } elseif($pedagang->status == 'process') {
+                $status = '<font style
+                ="color:blue;font-weight:bold;">Proses</font>';
             } elseif($pedagang->status == 'verified') {
                 $status = '<font style
                 ="color:green;font-weight:bold;">Verified</font>';
-            }  elseif($pedagang->status == 'delice') {
+            } elseif($pedagang->status == 'Delice') {
                 $status = '<font style
                 ="color:red;font-weight:bold;">Decline</font>';
             } else {
                 $status = '<font style
-                ="color:yellow;font-weight:bold;">Revoke</font>';
+                ="color:red;font-weight:bold;">Denied</font>';
             }
 
             return $status;
@@ -92,6 +97,8 @@ class PedagangController extends Controller
 
         //create data lapak
         $pedagang = Pedagang::create($data);
+        //create status lapak
+        StatusPedagang::create(['pedagang_id' => $pedagang->id]);
         
         //update status lapak = 1
         $pedagang->lapak->update(['statusLapak' => 1]);
@@ -171,13 +178,13 @@ class PedagangController extends Controller
     public function destroy($id)
     {
         $pedagang = Pedagang::findOrFail($id);
-        if ($pedagang->status == 'request') {
+        if ($pedagang->status != 'verified' && $pedagang->status != 'process') {
             //ambil data imgae
             if ($pedagang->foto) {
                 Storage::delete($pedagang->foto);
             }
             $pedagang->lapak->update(['statusLapak' => 0]);
-            $pedagang->forceDelete();
+            $pedagang->delete();
 
             $success = \true;
             $message = 'Data telah dihapus';
@@ -189,5 +196,65 @@ class PedagangController extends Controller
             'success' => $success,
             'message' => $message
         ]);
+    }
+
+    public function prosesRequest_lapak($id)
+    {
+        $pedagang = Pedagang::findOrFail($id);
+        $pedagang->status->update(['status' => 'process']);
+        $pedagang->statusPedagang->update(['isProcess_pasar' => 'ok']);
+        return \redirect()->back();
+    }
+
+    public function recyclePedagang()
+    {
+        return view('admin.pedagang.recyclePedagang');
+    }
+
+    public function dtRecyclePedagang()
+    {
+        $pedagang = Pedagang::with('mPasar', 'lapak')->where([
+            ['mPasar_id', '=' ,$this->getMasterPasar()->id],
+            ['status', '!=', 'nonActive']
+        ])->orderBy('created_at', 'asc')->onlyTrashed()->get();
+        
+        return \datatables()->of($pedagang)
+        ->addColumn('action', function(Pedagang $pedagang){
+            $btn = '
+            <a href="/admin/restore/pedagang/' . $pedagang->id . '" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Edit data."><i class="fa fa-trash-restore"></i> Restore</a>
+            ';
+            return $btn;
+        })
+        ->addColumn('status', function(Pedagang $pedagang){
+            if ($pedagang->status == 'request') {
+                $status = '<font style
+                ="color:blue;font-weight:bold;">Request Lapak</font>';
+            } elseif($pedagang->status == 'process') {
+                $status = '<font style
+                ="color:blue;font-weight:bold;">Proses</font>';
+            } elseif($pedagang->status == 'verified') {
+                $status = '<font style
+                ="color:green;font-weight:bold;">Verified</font>';
+            } elseif($pedagang->status == 'Delice') {
+                $status = '<font style
+                ="color:red;font-weight:bold;">Decline</font>';
+            } else {
+                $status = '<font style
+                ="color:red;font-weight:bold;">Denied</font>';
+            }
+
+            return $status;
+        })
+        ->rawColumns(['action', 'status'])
+        ->addIndexColumn()
+        ->toJson();
+    }
+
+    public function restorePedagang($id)
+    {
+        $pedagang = Pedagang::withTrashed()
+        ->where('id', $id)
+        ->restore();
+        return \redirect()->back()->with('message', 'Data berhasil di restore.');
     }
 }

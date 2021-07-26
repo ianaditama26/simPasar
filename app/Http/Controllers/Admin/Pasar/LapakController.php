@@ -36,7 +36,20 @@ class LapakController extends Controller
             return $lapak->getFormatTarif() . ' | '. $lapak->zonasi;
             // return $lapak->mPasar->pasar->namaPasar;
         })  
-        ->rawColumns(['action', 'tarif'])
+        ->addColumn('statusLapak', function(Lapak $lapak){
+            if ($lapak->statusLapak == 1) {
+                $status = '
+                    <font color="blue">Ditempati</>
+                ';
+            } else {
+                $status = '
+                    <font>Kosong</>
+                ';
+            }
+
+            return $status;
+        })
+        ->rawColumns(['action', 'tarif', 'statusLapak'])
         ->addIndexColumn()
         ->toJson();
     }

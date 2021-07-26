@@ -49,6 +49,23 @@
                      </div>
                   </div>
                   <div class="form-group row">
+                     <label for="tarif" class="col-sm-2 col-form-label">Tarif</label>
+                     <div class="col-sm-10">
+                        <select name="tarif" class="form-control @error('tarif') is-invalid @enderror" required>
+                           <option value="{{ $lapak->seri }}">{{ $lapak->seri }}</option> 
+                           <option value=""></option> 
+                           <option value="q">Q</option> 
+                           <option value="k">K</option> 
+                           <option value="f">K</option> 
+                        </select>
+                        @error('tarif')
+                           <div class="invalid-feedback">
+                              {{ $message }}
+                           </div>
+                        @enderror
+                     </div>
+                  </div>
+                  <div class="form-group row">
                      <label for="zonasi" class="col-sm-2 col-form-label">Zonasi</label>
                      <div class="col-sm-10">
                         <select name="zonasi" class="form-control @error('zonasi') is-invalid @enderror" required>

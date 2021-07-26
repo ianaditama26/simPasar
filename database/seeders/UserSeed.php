@@ -41,6 +41,24 @@ class UserSeed extends Seeder
             'role' => 'superAdmin',
         ]);
 
-        $roleSuperAdmin->assignRole('superAdmin');
+        $roleAdmin2->assignRole('admin');
+
+        $roleSuperAdmin = User::create([
+            'name' => 'Diskomindag',
+            'email' => 'diskomindag@gmail.test',
+            'password' => bcrypt(12345),
+            'role' => 'diskomindag',
+        ]);
+
+        $roleSuperAdmin->assignRole('diskomindag');
+
+        $roleUptPasar = User::create([
+            'name' => 'UPT PASAR',
+            'email' => 'upt@gmail.test',
+            'password' => bcrypt(12345),
+            'role' => 'upt',
+        ]);
+
+        $roleUptPasar->assignRole('upt');
     }
 }
